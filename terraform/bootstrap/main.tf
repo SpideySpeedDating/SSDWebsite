@@ -62,7 +62,7 @@ locals {
         {
           "Effect" : "Allow",
           "Principal" : {
-            "Federated" : "arn:aws:iam::spideyspeeddating-bbd-tfstate:oidc-provider/token.actions.githubusercontent.com"
+            "Federated" : aws_iam_openid_connect_provider.githubActions.arn
           },
           "Action" : "sts:AssumeRoleWithWebIdentity",
           "Condition" : {
