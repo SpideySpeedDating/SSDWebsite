@@ -29,6 +29,10 @@ class Router {
         // TODO: Register routes
     }
 
+    static registerState() {
+        // TODO: Register shared context among routes
+    }
+
     static uriHandler() {
         // Assuming we going with a hash location
         var location = window.location.hash.replace("#", "");
