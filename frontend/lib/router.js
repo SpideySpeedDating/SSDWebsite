@@ -1,3 +1,5 @@
+import { Utils } from "./utils";
+
 class Router {
     #routes = null;
 
@@ -12,7 +14,7 @@ class Router {
     }
 
     registerState(state) {
-        if (window.state === undefined || window.state === null ) window.state = {}
+        if (Utils.isNullOrUndefined(window.state)) window.state = {}
         else window.state = {...window.state, ...state}
     }
 
@@ -24,12 +26,16 @@ class Router {
         this.updateHtml(this.getTemplateHtml(route.template, route.title));
     }
 
-    getTemplateHtml(templatePath){
+    getTemplateHtml(templatePath) {
         // TODO: Fetch Route Template
         return "";
     }
 
-    updateHtml(innerHtml, title){
+    mountStyleTag() {
+        
+    }
+
+    updateHtml(innerHtml, title) {
         document.getElementById("app-container").innerHTML = innerHtml;
         document.title = title;
     }
