@@ -1,3 +1,7 @@
 .terraform
 .terraform.lock.hcl
 terraform.tfstate*
+
+node_modules
+.env
+package-lock.json
