@@ -1,54 +1,42 @@
 class Router {
-    static #isInternalConstructor = false;
-    static #instance = null;
-    static #routes = {
-        "/": {
-            title: "Home",
-            template: "./templates/index.html"
-        }
-    };
+    #routes = null;
+
     static #default404 = {
         title: "404 Not Found",
         template: "./templates/404.html"
     }
 
-    constructor() {
-        if (!Router.#isInternalConstructor) throw new TypeError("Router is not constructable");
-        Router.#isInternalConstructor = false;
+    constructor(routes, state={}) {
+        this.#routes = routes;
+        this.registerState(state);
     }
 
-    static get Instance() {
-        if (Router.#instance === null){
-            Router.#isInternalConstructor = true;
-            Router.#instance = new Router();
-        }
-        return Router.#instance;
+    registerState(state) {
+        if (window.state === undefined || window.state === null ) window.state = {}
+        else window.state = {...window.state, ...state}
     }
 
-    static registerRoute() {
-        // TODO: Register routes
-    }
-
-    static registerState() {
-        // TODO: Register shared context among routes
-    }
-
-    static uriHandler() {
+    uriHandler() {
         // Assuming we going with a hash location
         var location = window.location.hash.replace("#", "");
         if (location.length == 0) location = "/"
-        var route = Router.#routes[location] || Router.#routes["404"] || Router.#default404
-        // TODO: Fetch Route Template
-        // TODO: Update document 
-        /**
-         *  We need to know the 'app-container' id before hand so we know where to update the document
-         */
-        // document.title = route.title
+        var route = this.#routes[location] || this.#routes["404"] || Router.#default404
+        this.updateHtml(this.getTemplateHtml(route.template, route.title));
     }
 
-    static run() {
-        window.addEventListener("hashchange", Router.uriHandler);
-        Router.uriHandler();
+    getTemplateHtml(templatePath){
+        // TODO: Fetch Route Template
+        return "";
+    }
+
+    updateHtml(innerHtml, title){
+        document.getElementById("app-container").innerHTML = innerHtml;
+        document.title = title;
+    }
+
+    run() {
+        window.addEventListener("hashchange", this.uriHandler);
+        this.uriHandler();
     }
 }
 
