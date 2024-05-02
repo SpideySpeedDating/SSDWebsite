@@ -16,7 +16,7 @@ module "rds" {
   skip_final_snapshot = true
 
   db_subnet_group_name   = module.vpc.database_subnet_group_name
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = [module.vpc_sg.security_group_id]
   publicly_accessible    = true
 
   db_name                     = "spideyspeeddatingdb"

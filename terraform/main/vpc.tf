@@ -19,14 +19,50 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-resource "aws_security_group" "rds" {
-  name_prefix = "rds-"
+module "vpc_sg" {
+  source = "terraform-aws-modules/security-group/aws"
 
-  vpc_id = module.vpc.vpc_id
-  ingress {
-    from_port   = "5432"
-    to_port     = "5432"
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  name        = "spidey-speed-dating-sg"
+  vpc_id      = module.vpc.vpc_id
+  security_group_id = module.vpc.default_security_group_id
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      description = "Spidey Speed Dating DB Port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "Spidey Speed Dating SSH TCP"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      description = "Spidey Speed Dating HTTP Port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "Spidey Speed Dating HTTPS Port"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      description = "All traffic"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
 }
