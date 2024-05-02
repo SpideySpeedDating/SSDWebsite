@@ -1,4 +1,4 @@
-import { Utils } from "./utils";
+import { Utils } from "./utils.js";
 
 class Renderer {
 
@@ -21,6 +21,10 @@ class Renderer {
         }
         return element;
     }
+
+    static render(element) {
+        document.body.appendChild(element);
+    }
 }
 
-export default Renderer;
+export { Renderer };

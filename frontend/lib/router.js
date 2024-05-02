@@ -1,11 +1,12 @@
-import { Utils } from "./utils";
+import { Utils } from "./utils.js";
 
 class Router {
     #routes = null;
+    #routeHistory = [];
 
     static #default404 = {
         title: "404 Not Found",
-        template: "./templates/404.html"
+        template: "/lib/templates/404.html"
     }
 
     constructor(routes, state={}) {
@@ -18,21 +19,25 @@ class Router {
         else window.state = {...window.state, ...state}
     }
 
-    uriHandler() {
+    async uriHandler() {
         // Assuming we going with a hash location
+        console.log(window.location);
         var location = window.location.hash.replace("#", "");
         if (location.length == 0) location = "/"
         var route = this.#routes[location] || this.#routes["404"] || Router.#default404
-        this.updateHtml(this.getTemplateHtml(route.template, route.title));
+        this.updateHtml(await this.getTemplateHtml(route.template), route.title);
     }
 
-    getTemplateHtml(templatePath) {
-        // TODO: Fetch Route Template
-        return "";
+    async getTemplateHtml(templatePath) {
+        return await fetch(`${window.location.origin}/frontend${templatePath}`).then((response) => response.text());;
     }
 
     mountStyleTag() {
-        
+
+    }
+
+    mountScriptTag() {
+
     }
 
     updateHtml(innerHtml, title) {
@@ -40,10 +45,10 @@ class Router {
         document.title = title;
     }
 
-    run() {
+    async run() {
         window.addEventListener("hashchange", this.uriHandler);
-        this.uriHandler();
+        await this.uriHandler();
     }
 }
 
-export default Router
+export{ Router };
