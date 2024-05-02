@@ -5,7 +5,7 @@ module "ec2-instance" {
   instance_type                = "t2.micro"
   ami_ssm_parameter            = "/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id"
   vpc_security_group_ids       = [module.vpc_sg.security_group_id]
-  subnet_id                    = module.vpc.public_subnets[2]
+  subnet_id                    = module.vpc.public_subnets[0]
   associate_public_ip_address  = true
 }
 
