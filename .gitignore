@@ -13,3 +13,6 @@ node_modules
 .idea
 *.iml
 .vscode
+
+# Compiled JS files
+frontend/lib
