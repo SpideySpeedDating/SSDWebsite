@@ -1,7 +1,6 @@
 module "ec2-instance" {
   source                       = "terraform-aws-modules/ec2-instance/aws"
   name                         = "spidey-speed-dating-server-instance"
-  key_name                     = "ec2-spidey-speed-dating-ssh-key"
   instance_type                = "t2.micro"
   ami_ssm_parameter            = "/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id"
   vpc_security_group_ids       = [module.vpc_sg.security_group_id]
