@@ -46,4 +46,27 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+    
+    - name: SSH into EC2 and deploy new Docker Image
+      id: deploy-image
+      uses: appleboy/ssh-action@master
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
+        AWS_SESSION_TOKEN: $${{ steps.creds.outputs.aws-session-token }}
+      with:
+        host: ${{ secrets.EC2_IP }}
+        username: ubuntu
+        key:  ${{ secrets.EC2_PRIVATE_KEY }}
+        envs: ECR_REGISTRY, ECR_REPOSITORY, IMAGE_TAG, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_REGION
+        script: |-
+           aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
+           sudo docker stop website || true
+           sudo docker rm website || true
+           sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+           sudo docker run -d --name my-node-app -p 8080:5000 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
