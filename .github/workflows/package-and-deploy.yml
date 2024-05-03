@@ -36,6 +36,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       # The website's dockerfile is currently inside a subdirectory - Potential for moving it up
       working-directory: ./app
