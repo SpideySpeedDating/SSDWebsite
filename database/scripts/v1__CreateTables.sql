@@ -25,8 +25,8 @@ CREATE TABLE answer (
   question_id int NOT NULL
 );
 
-ALTER TABLE userquestion ADD FOREIGN KEY (user_id) REFERENCES user (user_id);
+ALTER TABLE user_question ADD CONSTRAINT "User_Question_User_Id_FK" FOREIGN KEY (user_id) REFERENCES user (user_id);
 
-ALTER TABLE userquestion ADD FOREIGN KEY (user_question_id) REFERENCES question (question_id);
+ALTER TABLE user_question ADD CONSTRAINT "User_Question_User_Question_Id_FK" FOREIGN KEY (user_question_id) REFERENCES question (question_id);
 
-ALTER TABLE answer ADD FOREIGN KEY (question_id) REFERENCES question (question_id);
+ALTER TABLE answer ADD ADD CONSTRAINT "Answer_Question_Id_FK" FOREIGN KEY (question_id) REFERENCES question (question_id);
