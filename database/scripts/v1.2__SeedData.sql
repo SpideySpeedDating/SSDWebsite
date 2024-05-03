@@ -1,17 +1,9 @@
-INSERT INTO "Question" ("question") VALUES
-  ('What are your hobbies or interests?'),
-  ('What''s your favorite type of music or artist?'),
-  ('What''s the last book you read or movie you watched that you really enjoyed?'),
-  ('What''s your idea of a perfect date?'),
-  ('What do you value most in a relationship?'),
-  ('What''s something you''re passionate about?'),
-  ('What''s a skill you''d like to learn or improve?'),
-  ('Do you prefer outdoor activities or indoor activities?'),
-  ('What''s your favorite way to spend a weekend?'),
-  ('What''s your favorite food or cuisine?'),
-  ('What''s your favorite travel destination or dream vacation spot?'),
-  ('What''s something that always makes you laugh?'),
-  ('What''s your biggest pet peeve?'),
-  ('What''s a goal you''re currently working towards?'),
-  ('What''s a cause or charity you care about?'),
-  ('What''s your idea of happiness?');
+INSERT INTO question (question) VALUES
+  ('Were you breastfed as a child?'),
+  ('What type of bear is best?'),
+  ('Describe your perfect avocado?'),
+  (' What is your opinion on the following statement: Butter is food lotion'),
+  ('How did Bruno Mars know her eyes were open, unless his were too?'),
+  ('Do you agree with the following statement: Male spiders can be romantic'),
+  ('If you were stuck on a deserted island, and you could only write one Javascript program to keep you busy, how would you kill yourself?'),
+  ('Would you rather be stuck on an island with a male spider or a bear spider?');
