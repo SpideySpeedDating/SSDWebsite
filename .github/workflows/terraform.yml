@@ -3,7 +3,7 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "main", "sean/aws_hosting" ]
+    branches: [ "main" ]
   pull_request:
 
 permissions:
@@ -51,5 +51,5 @@ jobs:
     # Run on push to main or aws_hosting
     - name: Terraform Apply
       working-directory: ./terraform/main
-      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/sean/aws_hosting') && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
