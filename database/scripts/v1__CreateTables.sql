@@ -8,7 +8,7 @@ CREATE TABLE user (
   Age int
 );
 
-CREATE TABLE userquestion (
+CREATE TABLE user_question (
   user_question_id serial PRIMARY KEY,
   user_id int NOT NULL,
   question_id int NOT NULL
