@@ -2,15 +2,15 @@
   "name": "ssdwebsite",
   "version": "1.0.0",
   "description": "Spidey Speed Dating Website",
-  "main": "index.js",
+  "main": "app.js",
   "engines": {
     "node": "20.12.2",
     "npm": "10.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "env-start": "node --env-file=.env index.js"
+    "start": "node app.js",
+    "env-start": "node --env-file=.env app.js"
   },
   "repository": {
     "type": "git",

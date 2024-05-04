@@ -36,7 +36,7 @@ class Router {
         };
     }
     async getTemplateHtml(templatePath) {
-        return await fetch(`${window.location.origin}/frontend${templatePath}`).then((response) => response.text());
+        return await fetch(`${window.location.origin}${templatePath}`).then((response) => response.text());
     }
     mountStyleTag() {
     }
