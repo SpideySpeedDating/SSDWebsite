@@ -13,3 +13,8 @@ node_modules
 .idea
 *.iml
 .vscode
+.terraform
+.terraform.lock.hcl
+terraform.tfstate*
+
+package-lock.json

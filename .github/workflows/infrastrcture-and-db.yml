@@ -1,0 +1,78 @@
+# Deploys the Terraform infrastructure, and updates the database if it succeeded
+name: 'Deploy Infrastructure and Update DB'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Configure AWS credentials from AWS account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-session-name: Github-OIDC-TERRAFORM
+        audience: sts.amazonaws.com
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      working-directory: ./terraform/main
+      run: terraform init
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      working-directory: ./terraform/main
+      run: terraform plan -input=false
+
+    # Run on push to main or aws_hosting
+    - name: Terraform Apply
+      working-directory: ./terraform/main
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+
+  database-migrate:
+    needs: terraform
+    name: 'Database Migration'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Migrate
+        uses: joshuaavalon/flyway-action@v3.0.0
+        with:
+          url: ${{ secrets.DB_URL }}
+          user: ${{ secrets.DB_USER }}
+          password: ${{ secrets.DB_PASSWORD }}
+          locations:  filesystem:./database/scripts
+        env:
+          FLYWAY_VALIDATE_MIGRATION_NAMING: true
