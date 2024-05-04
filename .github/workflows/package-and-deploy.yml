@@ -39,7 +39,7 @@ jobs:
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       # The website's dockerfile is currently inside a subdirectory - Potential for moving it up
-      working-directory: ./app
+      working-directory: ./frontend
       run: |
         # Build a docker container and
         # push it to ECR
