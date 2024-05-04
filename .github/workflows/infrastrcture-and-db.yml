@@ -1,5 +1,5 @@
 # Deploys the Terraform infrastructure, and updates the database if it succeeded
-name: 'Terraform'
+name: 'Deploy Infrastructure and Update DB'
 
 on:
   push:
