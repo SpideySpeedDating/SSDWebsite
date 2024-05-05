@@ -1,0 +1,135 @@
+/* ----------- CSS RESET -------------- */
+/* https://www.joshwcomeau.com/css/custom-css-reset/ */
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  5. Improve media defaults
+*/
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  6. Remove built-in form typography styles
+*/
+input, button, textarea, select {
+  font: inherit;
+}
+/*
+  7. Avoid text overflows
+*/
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+/*
+  8. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
+}
+
+/* ------------------------- */
+
+/* --- Other Root changes --- */
+
+html, body {
+  height: 100%;
+}
+
+/* --- Variables --- */
+
+:root {
+  --main-bg-color: #D1AAC8;
+  --primary-color:  #77AE6F;
+  --text-1-color: #504DFF;
+  --text-2-color: #0090CD;
+  --text-3-color: #ED4C7F;
+  --text-4-color: #524944;
+}
+
+/* --- General Settings --- */
+
+body {
+  color: var(--text-1-color);
+  background-color: var(--main-bg-color);
+  font-family: "Solway", serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Calistoga", serif;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+a {
+  color: var(--text-4-color); 
+}
+
+#app-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: space-between;
+}
+
+/* --- nav --- */
+
+nav {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav .links {
+  padding: 3ch;
+}
+
+nav .links a {
+  text-decoration: none;
+}
+
+nav .links a:visited {
+  color: var(--text-4-color); 
+}
+
+/* --- footer --- */
+
+footer {
+  padding: 5ch;
+}
+
+/* --- Home Page --- */
+
+#home-page {
+  display: flex;
+  justify-content: center;
+}
+
+#home-page h1 {
+  align-self: center;
+}
