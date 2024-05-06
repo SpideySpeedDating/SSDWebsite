@@ -132,4 +132,30 @@ footer {
 
 #home-page h1 {
   align-self: center;
+  text-transform: uppercase;
+  padding: 1rem;
+}
+
+#home-page h1::before {
+  background-image: url("../img/web_pink.png");
+  position: absolute;
+  background-size: 1.2em 1.2em;
+  display: inline-block;
+  width: 1.2em; 
+  height: 1.2em;
+  content:"";
+  translate: -1em 1em;
+  z-index: -1;
+}
+
+.hanging-spider::after {
+  background-image: url("../img/greyGreen_spider.png");
+  position: absolute;
+  background-size: 1.7em 1.7em;
+  display: inline-block;
+  width: 1.7em; 
+  height: 1.7em;
+  content:"";
+  translate: -1.2em 1em;
+  z-index: -1;
 }
