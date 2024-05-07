@@ -18,9 +18,7 @@ class DomBuilder {
         close: DomBuilder.processCloseTag
     };
 
-
     private nodes: TesseraTagNode[];
-
 
     constructor(htmlString: string, htmlId: string) {
         this.htmlString = htmlString.trim();
@@ -80,6 +78,10 @@ class DomBuilder {
 
     private popCompletedNode() {
         let node = (this.nodes.pop() as TesseraTagNode);
+        if (CssBuilder.StyleTags.has(node.tagName)) {
+            CssBuilder.prependStyles({file: this.htmlId, tree: node});
+            return;
+        }
         if (this.nodes.length == 0) this.tree = node;
         else this.nodes[this.nodes.length - 1].children.push(node);
     }
@@ -98,6 +100,7 @@ class DomBuilder {
 
     public build(): TesseraTagNode | undefined{
         if (Utils.isNullOrUndefined(this.tree)) this.processTags();
+        CssBuilder.outputToFile("");
         return this.tree;
     }
 }
