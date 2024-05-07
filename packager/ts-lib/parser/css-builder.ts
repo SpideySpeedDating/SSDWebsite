@@ -1,20 +1,15 @@
-import { DomBuilder } from "./dom-builder";
 import { TagEventData, TesseraTextNode } from "./tree-objects";
 import { Utils } from "./uitls";
 
-class CssBuiler {
+class CssBuilder {
     private static styles : { [key: string] : string} = {};
 
-    static {
-        DomBuilder.eventEmitter.on("style", CssBuiler.prependStyles);
-    }
-
     public static prependStyles(data: TagEventData) {
-        if (Utils.isNullOrUndefined(CssBuiler.styles[data.file])) {
-            CssBuiler.styles[data.file] = "";
+        if (Utils.isNullOrUndefined(CssBuilder.styles[data.file])) {
+            CssBuilder.styles[data.file] = "";
         }
         for (let childNode of data.tree.children) {
-            if (childNode instanceof TesseraTextNode) CssBuiler.styles[data.file] += `${childNode.text}\n`;
+            if (childNode instanceof TesseraTextNode) CssBuilder.styles[data.file] += `${childNode.text}\n`;
         }
     }
 
@@ -23,6 +18,8 @@ class CssBuiler {
         for (let htmlId of Object.keys(this.styles)) {
             outputStr += `@scope {#${htmlId} ${this.styles[htmlId]}}`;
         }
-        console.log(outputStr);
+        console.log(outputStr.trim());
     }
 }
+
+export { CssBuilder }

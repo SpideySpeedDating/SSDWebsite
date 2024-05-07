@@ -7,21 +7,17 @@ interface TesseraNodeInterface<T> {
 
 abstract class TesseraNodeBase<T> implements TesseraNodeInterface<T> {
     public abstract readonly children: Array<T>;
-    public abstract readonly parent?: TesseraTagNode | undefined;
     public abstract readonly isSelfClosing: boolean;
 }
 
 class TesseraTextNode extends TesseraNodeBase<string> {
     override readonly children; 
-    public override readonly parent: TesseraTagNode;
     public override readonly isSelfClosing: boolean;
 
     constructor({
-        parent,
         text
     }: TesseraTextNodeOptions) {
         super();
-        this.parent = parent;
         this.children = [text];
         this.isSelfClosing = true;
     }
@@ -33,7 +29,6 @@ class TesseraTextNode extends TesseraNodeBase<string> {
 }
 
 interface TesseraTextNodeOptions extends TesseraNodeInterface<string> {
-    parent: TesseraTagNode,
     text: string
 }
 
@@ -44,10 +39,7 @@ class ParserAttributeError extends ParserError {
 }
 class Attributes {
 
-    private attrsString: string;
-
     private constructor(attrString: string) {
-        this.attrsString = attrString;
         let attrs = attrString?.matchAll(Utils.regExp.attributes) || [];
         for(var results of attrs) {
             let groups = (results.groups as {[key: string] : string});
@@ -58,7 +50,15 @@ class Attributes {
     }
 
     public toString(): string {
-        return this.attrsString;
+        let output = ""; 
+        for (let keyVal of Object.entries(this)) {
+            output += `${keyVal[0]}="${keyVal[1]}" `;
+        }
+        return output;
+    }
+
+    public set(key: string, val: string) {
+        Object.defineProperty(this, key, {value: val});
     }
 
     public static create(attrsString: string | undefined): Attributes | undefined {
@@ -72,28 +72,23 @@ type Groups = {[key: string]: string};
 
 class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
     public override children: Array<TesseraTagNode | TesseraTextNode>;
-    public override parent?: TesseraTagNode | undefined;
     public override isSelfClosing: boolean;
     public attributes: Attributes | undefined;
     public readonly tagName: string;
     constructor({
-        parent,
         tagName,
         attributes,
         isSelfClosing
     }: TesseraTagNodeOptions) {
         super();
-        this.parent = parent;
         this.children = [];
         this.isSelfClosing = isSelfClosing;
         this.attributes = attributes;
         this.tagName = tagName;
-        this.parent = parent;
     }
 }
 
 interface TesseraTagNodeOptions extends TesseraNodeInterface<TesseraTagNode | TesseraTextNode> {
-    parent: TesseraTagNode | undefined,
     tagName: string,
     attributes: Attributes | undefined,
     isSelfClosing: boolean
