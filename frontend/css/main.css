@@ -70,7 +70,7 @@ html, body {
 /* --- General Settings --- */
 
 body {
-  color: var(--text-1-color);
+  color: var(--text-4-color);
   background-color: var(--main-bg-color);
   font-family: "Solway", serif;
 }
@@ -83,16 +83,40 @@ h1 {
   font-size: 2.5rem;
 }
 
+h1, h2 {
+  color: var(--text-1-color)
+}
+
+h3, h4, h5 {
+  color: var(--text-2-color)
+}
+
 a {
   color: var(--text-4-color); 
 }
 
-#app-container {
+.flex-container {
   display: flex;
   height: 100%;
-  flex-direction: column;
   align-content: space-around;
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-justify-space-between {
   justify-content: space-between;
+}
+
+/* Instead of putting justify-content on the app-container, this prevents the text from escaping out the top */
+#app-container > :first-child {
+  margin-top: auto;
+}
+
+#app-container > :last-child {
+  margin-bottom: auto;
 }
 
 /* --- nav --- */
@@ -100,9 +124,10 @@ a {
 nav {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 100vw;
   align-items: center;
   justify-content: space-between;
+  align-self: flex-start;
 }
 
 nav .links {
@@ -121,6 +146,10 @@ nav .links a:visited {
 
 footer {
   padding: 5ch;
+}
+
+footer {
+  align-self: flex-start;
 }
 
 /* --- Home Page --- */
@@ -158,4 +187,24 @@ footer {
   content:"";
   translate: -1.2em 1em;
   z-index: -1;
+}
+
+/* --- Info page --- */
+
+#info-page {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: calc(90% - 1rem);
+}
+
+/* Header isn't part of the main thing called an info page? */
+header:has(+ #info-page) h2 {
+  align-self: center;
+  padding: 0.5rem 1rem;
+}
+
+header:has(+ #info-page) h2::after,
+header:has(+ #info-page) h2::before {
+  content: "🎉";
 }
