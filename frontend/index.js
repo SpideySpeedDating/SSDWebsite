@@ -16,5 +16,9 @@ const router = new Router({
     "info" : {
         title: "Information",
         template: "/templates/info.html"
+    },
+    "question" : {
+        title: "Questions",
+        template: "/templates/question.html"
     }
 }, {});

@@ -83,6 +83,10 @@ h1 {
   font-size: 2.5rem;
 }
 
+h2 {
+  font-size: 2rem;
+}
+
 h1, h2 {
   color: var(--text-1-color)
 }
@@ -106,8 +110,16 @@ a {
   flex-direction: column;
 }
 
+.flex-justify-center {
+  justify-content: center;
+}
+
 .flex-justify-space-between {
   justify-content: space-between;
+}
+
+.flex-justify-space-around {
+  justify-content: space-around;
 }
 
 /* Instead of putting justify-content on the app-container, this prevents the text from escaping out the top */
@@ -117,6 +129,10 @@ a {
 
 #app-container > :last-child {
   margin-bottom: auto;
+}
+
+main.flex-container {
+  width: calc(90vw - 1rem);
 }
 
 /* --- nav --- */
@@ -150,6 +166,22 @@ footer {
 
 footer {
   align-self: flex-start;
+}
+
+/* --- input --- */
+input,
+textarea {
+  border: 1px solid #29BF12;
+  background-color: var(--text-4-color);
+  color: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  border: 1px solid #29BF12;
+  outline: 0;
 }
 
 /* --- Home Page --- */
@@ -195,7 +227,6 @@ footer {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: calc(90% - 1rem);
 }
 
 /* Header isn't part of the main thing called an info page? */
@@ -207,4 +238,15 @@ header:has(+ #info-page) h2 {
 header:has(+ #info-page) h2::after,
 header:has(+ #info-page) h2::before {
   content: "🎉";
+}
+
+/* --- Question page --- */
+header:has(+ #question-page):first-child {
+  margin-top: 2rem;
+  margin-bottom: auto;
+}
+
+#question-page textarea {
+  width: 80%;
+  resize: none;
 }
