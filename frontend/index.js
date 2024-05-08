@@ -20,5 +20,9 @@ const router = new Router({
     "question" : {
         title: "Questions",
         template: "/templates/question.html"
+    },
+    "dating-screen" : {
+        title: "Dating Time!",
+        template: "/templates/dating-screen.html"
     }
 }, {});
