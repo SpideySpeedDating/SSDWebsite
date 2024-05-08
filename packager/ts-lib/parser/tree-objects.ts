@@ -94,7 +94,7 @@ interface TesseraTagNodeOptions extends TesseraNodeInterface<TesseraTagNode | Te
     isSelfClosing: boolean
 }
 
-interface TagEventData { file: string, tree: TesseraTagNode };
+interface TagData { file: string, tree: TesseraTagNode };
 
 export { TesseraTextNode, TesseraTagNode, ParserAttributeError, Attributes };
-export type { TesseraTextNodeOptions, TesseraTagNodeOptions, Groups, TagEventData };
+export type { TesseraTextNodeOptions, TesseraTagNodeOptions, Groups, TagData };

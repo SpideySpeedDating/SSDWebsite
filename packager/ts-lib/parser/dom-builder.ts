@@ -1,7 +1,7 @@
 import { Attributes, TesseraTagNode, TesseraTextNode, ParserAttributeError, Groups } from "./tree-objects";
 import { ParserError } from "./errors";
 import { Utils } from "./uitls";
-import { CssBuilder } from "./css-builder";
+import { CssBuilderSingleton, JsBuilderSingleton } from "./css-js-file-builder";
 
 
 class DomBuilder {
@@ -17,6 +17,8 @@ class DomBuilder {
         open: DomBuilder.processOpenTag,
         close: DomBuilder.processCloseTag
     };
+    private cssBuilder: CssBuilderSingleton = CssBuilderSingleton.Instance;
+    private jsBuilder: JsBuilderSingleton = JsBuilderSingleton.Instance;
 
     private nodes: TesseraTagNode[];
 
@@ -78,9 +80,15 @@ class DomBuilder {
 
     private popCompletedNode() {
         let node = (this.nodes.pop() as TesseraTagNode);
-        if (CssBuilder.StyleTags.has(node.tagName)) {
-            CssBuilder.prependStyles({file: this.htmlId, tree: node});
+        if (this.cssBuilder.captureTags.has(node.tagName)) {
+            this.cssBuilder.prependTags({file: this.htmlId, tree: node});
             return;
+        }
+        if (this.jsBuilder.captureTags.has(node.tagName)) {
+            this.jsBuilder.prependTags({file: this.htmlId, tree: node});
+            let attributes = node.attributes;
+            if (!Object.hasOwn(attributes as Attributes, "src")) return;
+            node.children.splice(0, node.children.length);
         }
         if (this.nodes.length == 0) this.tree = node;
         else this.nodes[this.nodes.length - 1].children.push(node);
@@ -100,7 +108,8 @@ class DomBuilder {
 
     public build(): TesseraTagNode | undefined{
         if (Utils.isNullOrUndefined(this.tree)) this.processTags();
-        CssBuilder.outputToFile("");
+        this.cssBuilder.outputToFile("", this.htmlId);
+        this.tree?.attributes?.set("id", this.htmlId);
         return this.tree;
     }
 }
