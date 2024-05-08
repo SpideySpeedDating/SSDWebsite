@@ -75,23 +75,39 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
     public override isSelfClosing: boolean;
     public attributes: Attributes | undefined;
     public readonly tagName: string;
+    public readonly html: string;
     constructor({
         tagName,
         attributes,
-        isSelfClosing
+        isSelfClosing,
+        html,
     }: TesseraTagNodeOptions) {
         super();
         this.children = [];
         this.isSelfClosing = isSelfClosing;
         this.attributes = attributes;
         this.tagName = tagName;
+        this.html = html.trim()
+    }
+
+    public render(): string {
+        let open = `${this.html}`;
+        let inner = "";
+        if (this.children.length > 0) {
+            for(let child of this.children) {
+                inner += (child instanceof TesseraTextNode) ? child.text : child.render();
+            };
+        } 
+        let close = `${(this.isSelfClosing ? "" : "<"+this.tagName+"/>")}`;
+        return `${open} ${inner} ${close}`;
     }
 }
 
 interface TesseraTagNodeOptions extends TesseraNodeInterface<TesseraTagNode | TesseraTextNode> {
     tagName: string,
     attributes: Attributes | undefined,
-    isSelfClosing: boolean
+    isSelfClosing: boolean,
+    html: string
 }
 
 interface TagData { file: string, tree: TesseraTagNode };
