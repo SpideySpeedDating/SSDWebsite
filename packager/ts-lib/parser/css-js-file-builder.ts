@@ -20,7 +20,7 @@ abstract class LangBuilder {
     public outputToFile(outputDir: string, styleId: string) {
         let outputStr = "";
         for (let fileId of Object.keys(this.fileTagsMap)) {
-            outputStr + this.getOutputString(fileId);
+            outputStr += this.getOutputString(fileId);
         }
         console.log(outputStr.trim());
     }

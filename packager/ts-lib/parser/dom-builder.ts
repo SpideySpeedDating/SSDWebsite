@@ -87,7 +87,7 @@ class DomBuilder {
         if (this.jsBuilder.captureTags.has(node.tagName)) {
             this.jsBuilder.prependTags({file: this.htmlId, tree: node});
             let attributes = node.attributes;
-            if (!Object.hasOwn(attributes as Attributes, "src")) return;
+            if (!Object.keys(attributes as Attributes).includes("src")) return;
             node.children.splice(0, node.children.length);
         }
         if (this.nodes.length == 0) this.tree = node;
@@ -110,6 +110,7 @@ class DomBuilder {
         if (Utils.isNullOrUndefined(this.tree)) this.processTags();
         this.cssBuilder.outputToFile("", this.htmlId);
         this.tree?.attributes?.set("id", this.htmlId);
+        this.jsBuilder.outputToFile("", this.htmlId);
         return this.tree;
     }
 }
