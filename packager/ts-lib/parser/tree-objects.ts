@@ -93,11 +93,12 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
     public render(): string {
         let attributeStr = (Utils.isNullOrUndefined(this.attributes)) ? "" : (this.attributes as Attributes).toString();
         let open = `${this.html.replace(Utils.regExp.attributes, "")}`.trim();
-        open = `${open.replace(">", ((attributeStr === "") ? "" : " " + attributeStr) + ">")}`
+        let endBracket = this.isSelfClosing ? "/>" : ">"
+        open = `${open.replace(endBracket, ((attributeStr === "") ? "" : " " + attributeStr) + endBracket)}`
         let inner = "";
         if (this.children.length > 0) {
             for(let child of this.children) {
-                inner += (child instanceof TesseraTextNode) ? child.text.trim() : child.render();
+                inner += (child instanceof TesseraTextNode) ? child.text.replace("&", "&amp;").trim() : child.render();
             };
         } 
         let close = `${(this.isSelfClosing ? "" : "</"+this.tagName+">")}`;
