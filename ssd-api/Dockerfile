@@ -1,0 +1,27 @@
+FROM node:20-alpine
+WORKDIR /usr/local/app
+
+COPY package.json ./
+RUN npm install
+
+COPY . ./
+
+EXPOSE 3000
+
+RUN adduser app --disabled-password
+USER app
+
+ENV PORT 3000
+
+ARG DB_USER
+ARG DB_CONNECTIONSTRING
+ARG DB_NAME
+ARG DB_PASSWORD
+ARG DB_PORT
+ENV DB_USER=${DB_USER}
+ENV DB_CONNECTIONSTRING=${DB_CONNECTIONSTRING}
+ENV DB_NAME=${DB_NAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ENV DB_PORT=${DB_PORT}
+
+CMD ["npm", "start"]
