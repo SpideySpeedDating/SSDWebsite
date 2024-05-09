@@ -6,8 +6,8 @@ import path from "path";
 import fs from "fs";
 
 class App {
-    private outputDir: string | undefined = "./packager/ts-lib/test_out";
-    private inputDir: string | undefined = "./packager/ts-lib/test_html";
+    private outputDir: string | undefined = "";
+    private inputDir: string | undefined = "";
     private outputHtml: string = "";
     private outputCss: string = "";
 
