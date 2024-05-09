@@ -1,41 +1,118 @@
-<body>
-  <header>
-    <h2>Round <span id="round-id">1</span>:</h2>
-  </header>
-  <main id="dating-page" class="flex-container flex-column">
-    <span id="dating-question" class="question-box">
-        Were you breastfed as a child?
-    </span>
-    <div id="spider-container">
-      <!-- TODO: Place Spiders *randomly* -->
-      <button id="spider-1" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-2" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-3" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-4" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-5" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-6" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-7" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-      <button id="spider-8" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
-      </button>
-    </div>
-  </main>
-  
-  <footer> 
-    <button>BACK TO HOME</button>
-  </footer>
-</body>
+<header>
+  <h2>Round <span id="round-id">1</span>:</h2>
+</header>
+<main id="dating-page" class="flex-container flex-column">
+  <span id="dating-question" class="question-box">
+      Were you breastfed as a child?
+  </span>
+  <div id="spider-container">
+    <!-- TODO: Place Spiders *randomly* -->
+    <button id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-2" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-3" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-4" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-5" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-6" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-7" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+    <button id="spider-8" class="spider-button">
+      <img width="100px" height="100px" src="../img/greyGreen_spider.png">
+    </button>
+  </div>
+</main>
+
+<script>
+  let questions;
+  let userAnswers;
+  let questionNumber = 0;
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Authorization': ''
+    }
+  };
+
+  function initialize(){
+    questions[questionNumber].question; // To display in dating-question
+  }
+
+  function EatBug(clickedId) {
+    if(questionNumber === 7){
+      const buttonNumber = clickedId.split("-")[1];
+      userAnswers[buttonNumber].email // Somehow save email to display on next page
+    }
+
+    var element = document.getElementById(clickedId);
+    element.style.display = "none";
+
+    questionNumber += 1;
+  }
+
+  function SetSpiderAnswer(){
+    const answerBubbleId = "answerBubble"
+    var element = document.getElementById(answerBubbleId);
+    element.style.display = "block"; // ???
+
+    const buttonNumber = clickedId.split("-")[1];
+    let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
+    var answerElement = document.getElementById(answerBubbleId);
+    answerElement.textContent = spidersAnswer;
+  }
+
+  function HideAnswer(){
+    var element = document.getElementById(answerBubble);
+    element.style.display = "none";
+  }
+
+  function GetQuestions(){
+    fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions', requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+
+      return response.json();
+    })
+    .then(responseBody => {
+      questions = responseBody;
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  }
+
+  function GetUserAnswers(){
+    fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/random', requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response);
+      }
+
+      return response.json();
+    })
+    .then(responseBody => {
+      userAnswers = responseBody;
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  }
+</script>
+
+<footer> 
+<button>BACK TO HOME</button>
+</footer>
