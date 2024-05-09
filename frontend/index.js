@@ -3,15 +3,15 @@ import { Router } from "./lib/router.js";
 const router = new Router({
     "/" : {
         title: "Home",
-        template: "/templates/index.html"
+        template: "index"
     },
     "contact-us" : {
         title: "Contact Us",
-        template: "/templates/contact-us.html"
+        template: "contact-us"
     },
     "login" : {
         title: "Login",
-        template: "/templates/login.html"
+        template: "login"
     },
     "intro-questions" : {
         title: "Intro Questions",
@@ -19,22 +19,20 @@ const router = new Router({
     },
     "info" : {
         title: "Information",
-        template: "/templates/info.html"
+        template: "info"
     },
     "question" : {
         title: "Questions",
-        template: "/templates/question.html"
+        template: "question"
     },
     "dating-screen" : {
         title: "Dating Time!",
-        template: "/templates/dating-screen.html"
+        template: "dating-screen"
     },
     "dating-info" : {
         title: "Contact Us",
-        template: "/templates/dating-info.html"
+        template: "dating-info"
     },
-    "congrats" : {
-        title: "Contact Us",
-        template: "/templates/congrats.html"
-    },
-}, {});
+});
+
+await router.start();
