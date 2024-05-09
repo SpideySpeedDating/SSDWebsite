@@ -2,9 +2,10 @@ import { Utils } from "./utils.js";
 class Router {
     routes = null;
     routeHistory = [];
+    #templatesXml = null;
     static default404 = {
         title: "404 Not Found",
-        template: "/templates/default-404.html"
+        template: "default-404"
     };
 
     constructor(routes, state = {}) {
@@ -30,21 +31,23 @@ class Router {
     static getRouterBoundUriHandler(router) {
         return async (e) => {
             if (!Utils.isNullOrUndefined(e)) e.preventDefault();
+            if (router.#templatesXml === null) await router.getTemplates();
             let route = router.getRoute();
             router.routeHistory.push(route);
-            router.updateHtml(await router.getTemplateHtml(route.template), route.title);
+            router.updateHtml(route.template, route.title);
         };
     }
-    async getTemplateHtml(templatePath) {
-        return await fetch(`${window.location.origin}${templatePath}`).then((response) => response.text());
+    async getTemplates() {
+        let xmlStr = await fetch(`${window.location.origin}/templates.xml`).then((response) => response.text());
+        this.#templatesXml = new DOMParser().parseFromString(xmlStr, "text/xml");
     }
-    mountStyleTag() {
-    }
-    mountScriptTag() {
-    }
-    updateHtml(innerHtml, title) {
+    updateHtml(templateId, title) {
+        let templateBody = this.#templatesXml.getElementById(templateId);
         let appContainer = document.getElementById("app-container");
-        appContainer.innerHTML = innerHtml;
+        appContainer.innerHTML = "";
+        for(let child of templateBody.childNodes) {
+            appContainer.appendChild(child);
+        }
         document.title = title;
     }
 }

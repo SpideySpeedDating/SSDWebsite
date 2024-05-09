@@ -16,7 +16,7 @@ class App {
         let files = fs.readdirSync(inputDir);
         for(let filename of files) {
             if (path.extname(filename) === ".html") {
-                console.log(filename);
+                console.log(`Building Template: ${filename}`);
                 let dmb = new DomBuilder(
                     this.readFile(`${path.join(this.inputDir as string, filename)}`), filename.split(".")[0]);
                 this.outputHtml += `${dmb.getHtml()}\n`;
@@ -26,9 +26,7 @@ class App {
     }
 
     private readFile(filepath: string): string {
-        let output = fs.readFileSync(filepath, 'utf8');
-        console.log(output);
-        return output;
+        return fs.readFileSync(filepath, 'utf8');;
     }
 
     public build() {
