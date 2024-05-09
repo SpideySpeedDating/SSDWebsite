@@ -96,11 +96,10 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
         let endBracket = this.isSelfClosing ? "/>" : ">"
         open = `${open.replace(endBracket, ((attributeStr === "") ? "" : " " + attributeStr) + endBracket)}`
         let inner = "";
-        if (this.children.length > 0) {
-            for(let child of this.children) {
-                inner += (child instanceof TesseraTextNode) ? child.text.replace("&", "&amp;").trim() : child.render();
-            };
-        } 
+        for(let child of this.children) {
+            inner += (child instanceof TesseraTextNode) ? child.text.replace("&", "&amp;") : child.render();
+        };
+        if (this.tagName === "textarea" && inner === "") inner = " ";
         let close = `${(this.isSelfClosing ? "" : "</"+this.tagName+">")}`;
         return `${open}${inner}${close}`;
     }
