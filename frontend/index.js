@@ -5,10 +5,6 @@ const router = new Router({
         title: "Home",
         template: "index"
     },
-    "contact-us" : {
-        title: "Contact Us",
-        template: "contact-us"
-    },
     "login" : {
         title: "Login",
         template: "login"
@@ -30,7 +26,7 @@ const router = new Router({
         template: "dating-screen"
     },
     "dating-info" : {
-        title: "Contact Us",
+        title: "Dating-info",
         template: "dating-info"
     },
     "congrats" : {
