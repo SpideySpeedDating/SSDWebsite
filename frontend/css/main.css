@@ -167,6 +167,12 @@ footer {
 
 footer {
   align-self: flex-start;
+} 
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 /* --- input --- */
@@ -216,6 +222,12 @@ button {
   content:"";
   translate: -1em 1em;
   z-index: -1;
+} 
+
+#home-page + footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .hanging-spider::after {

@@ -4,14 +4,11 @@
 <main id="question-page" class="flex-container flex-column flex-justify-center">
   <form id="question-form" class="flex-container flex-column flex-justify-center">
     <label id="question-label" for="question-id">Were you breastfed as a child?</label>
-    <textarea 
-      id="question-input" 
-      maxlength=150
-      ></textarea>
-    
+    <textarea id="question-input" maxlength=150></textarea>
+
     <button id="question-form-button" type="submit">Next Question</button>
   </form>
-  
+
   <script>
     function resizeTextArea() {
       textarea = document.getElementById("question-input");
@@ -26,3 +23,9 @@
     window.addEventListener("resize", resizeTextArea);
   </script>
 </main>
+
+<footer>
+   <button>NEXT QUESTION</button> 
+   <button>BACK TO HOME</button>
+
+</footer>
