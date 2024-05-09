@@ -27,10 +27,10 @@ module.exports = {
     }
   },
 
-  findAllUserQuestions: async () => {
+  findAllUserQuestions: async (user) => {
     const client = await pool.connect();
     try {
-      const { rows } = await client.query('SELECT * FROM user_questions');
+      const { rows } = await client.query('SELECT * FROM user_questions WHERE user_id = $1', [user.user_id]);
       return rows;
     } finally {
       client.release();
