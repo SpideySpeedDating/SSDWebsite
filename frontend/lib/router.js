@@ -3,6 +3,7 @@ class Router {
     routes = null;
     routeHistory = [];
     #templatesXml = null;
+    uriHandlerClosure = null;
     static default404 = {
         title: "404 Not Found",
         template: "default-404"
@@ -11,9 +12,7 @@ class Router {
     constructor(routes, state = {}) {
         this.routes = routes;
         this.registerState(state);
-        let uriHandlerClosure = Router.getRouterBoundUriHandler(this);
-        window.addEventListener("hashchange", uriHandlerClosure);
-        uriHandlerClosure();
+        this.uriHandlerClosure = Router.getRouterBoundUriHandler(this);
     }
     registerState(state) {
         if (Utils.isNullOrUndefined(window.MosaicState))
@@ -43,12 +42,17 @@ class Router {
     }
     updateHtml(templateId, title) {
         let templateBody = this.#templatesXml.getElementById(templateId);
+        console.log(templateId);
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
         for(let child of templateBody.childNodes) {
             appContainer.appendChild(child);
         }
         document.title = title;
+    }
+    async start() {
+        window.addEventListener("hashchange", this.uriHandlerClosure);
+        await this.uriHandlerClosure();
     }
 }
 export { Router };

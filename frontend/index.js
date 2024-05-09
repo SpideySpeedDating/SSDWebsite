@@ -29,4 +29,6 @@ const router = new Router({
         title: "Contact Us",
         template: "dating-info"
     },
-}, {});
+});
+
+await router.start();
