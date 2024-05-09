@@ -322,3 +322,47 @@ header:has(+ #info-page) h2::before {
   justify-content: center;
   padding: 1rem;
 }
+/* --- Intro Questions Page --- */
+#intro-questions #intro-questions-form {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+  align-items: flex-end;
+}
+
+#intro-questions > form > span {
+  flex-basis: 20ch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#intro-questions label {
+  text-align: center;
+}
+
+#intro-questions > form > span:nth-child(1) {
+  flex-grow: 4;
+}
+
+#intro-questions > form > span:nth-child(2) {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 15ch;
+}
+
+#intro-questions > form > span:nth-child(3) {
+  flex-grow: 1;
+}
+
+#intro-questions > form > span:nth-child(4) {
+  flex-grow: 1;
+}
+
+#intro-questions input {
+  width: 90%;
+}

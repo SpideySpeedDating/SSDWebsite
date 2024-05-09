@@ -13,6 +13,10 @@ const router = new Router({
         title: "Login",
         template: "/templates/login.html"
     },
+    "intro-questions" : {
+        title: "Intro Questions",
+        template: "/templates/intro-questions.html"
+    },
     "info" : {
         title: "Information",
         template: "/templates/info.html"
