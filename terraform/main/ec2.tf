@@ -42,3 +42,37 @@ module "ecr" {
     }]
   })
 }
+
+module "ecr_api" {
+  source = "terraform-aws-modules/ecr/aws"
+
+  repository_name = "spidey-speed-dating-api-repo"
+
+  repository_lifecycle_policy = jsonencode({
+    rules = [{
+      rulePriority = 10
+      description  = "keep last 20 images"
+      action = {
+        type = "expire"
+      }
+      selection = {
+        tagStatus   = "any"
+        countType   = "imageCountMoreThan"
+        countNumber = 20
+      }
+    },
+    {
+      rulePriority = 1
+      description  = "Expire untagged images older than 14 days"
+      action = {
+        type = "expire"
+      }
+      selection = {
+        tagStatus   = "untagged"
+        countType   = "sinceImagePushed"
+        countUnit   = "days"
+        countNumber = 1
+      }
+    }]
+  })
+}

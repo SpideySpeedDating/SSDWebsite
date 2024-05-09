@@ -1,0 +1,7 @@
+services:
+  api:
+    build: .
+    ports:
+      - "5000:3000" # Host:Container
+    env_file:
+      - .env
