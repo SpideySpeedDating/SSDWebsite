@@ -22,6 +22,7 @@
     }
     async function getQuestions() {
       if (window.questions === undefined || window.questions === null) {
+        // Should be global for moving back
         window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions").then((response)=>{response.json()});
         window.currQuestionIdx = 0;
       }
@@ -73,7 +74,7 @@
     nextButton.addEventListener("click", updateToNextQuestion)
 
     questionLabel = document.getElementById("question-label");
-    await getQuestions()
+    getQuestions()
 
   </script>
 </body>
