@@ -9,7 +9,7 @@ module "ec2-instance" {
   associate_public_ip_address  = true
 }
 
-module "ecr" {
+module "ecr_server" {
   source = "terraform-aws-modules/ecr/aws"
 
   repository_name = "spidey-speed-dating-server-repo"
@@ -43,7 +43,7 @@ module "ecr" {
   })
 }
 
-module "ecr" {
+module "ecr_api" {
   source = "terraform-aws-modules/ecr/aws"
 
   repository_name = "spidey-speed-dating-api-repo"
