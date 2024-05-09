@@ -13,7 +13,6 @@ function ensureAuthenticated(req, res, next)
         return res.status(401).json({ message: 'Unauthorized, invalid token' });
       }
       req.authId = decoded.authId;
-      console.log("authId: " + req.authId);
       next();
     });
   }

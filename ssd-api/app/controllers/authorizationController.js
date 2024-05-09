@@ -11,19 +11,8 @@ async function auth(req, res) {
 
   const access_token = authorization.split(' ')[1];
   const userData = await middleware.getGitHubUserData(access_token);
-                                      // .then(userInfo => {
-                                      //     console.log('User ID:', userInfo.userId);
-                                      //     console.log('User Email:', userInfo.userEmail);
-                                      // })
-                                      // .catch(error => {
-                                      //     console.error(error);
-                                      // });
-  
   const authId = userData.userId;
   const userEmail = userData.userEmail;
-
-  console.log('User ID:', authId);
-  console.log('User Email:', userEmail);
 
   const user = await usersService.findUserByAuthId(authId);
   console.log(user);

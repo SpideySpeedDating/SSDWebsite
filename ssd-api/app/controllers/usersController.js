@@ -7,7 +7,7 @@ module.exports = {
             const responseBody = req.body;
 
             const createdUser = await usersService.createUser(
-                authId, 
+                authId,
                 { 
                     email: responseBody.email,
                     username: responseBody.username,
