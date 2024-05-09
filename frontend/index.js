@@ -15,7 +15,7 @@ const router = new Router({
     },
     "intro-questions" : {
         title: "Intro Questions",
-        template: "/templates/intro-questions.html"
+        template: "intro-questions"
     },
     "info" : {
         title: "Information",
@@ -33,6 +33,10 @@ const router = new Router({
         title: "Contact Us",
         template: "dating-info"
     },
+    "congrats" : {
+        title: "Congrats",
+        template: "congrats"
+    }
 });
 
 await router.start();
