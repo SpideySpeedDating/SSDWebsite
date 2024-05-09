@@ -15,7 +15,6 @@ async function auth(req, res) {
   const userEmail = userData.userEmail;
 
   const user = await usersService.findUserByAuthId(authId);
-  console.log(user);
   if (!user){
     await usersService.createUser(
       authId,
@@ -26,8 +25,6 @@ async function auth(req, res) {
           sexuality: null,
           age: null
       });
-    
-      console.log("What.");
     }
 
   res.send(middleware.createJWT({

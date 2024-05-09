@@ -6,13 +6,7 @@ module.exports = () => {
    router.get("/", middleware.ensureAuthenticated , controller.findUserAnswer);
    router.get("/all", middleware.ensureAuthenticated , controller.findAllUsersAnswers);
    router.post("/create", middleware.ensureAuthenticated, controller.createAnswer);
-   router.get("/status", (req, res) => {
-      const status = {
-          "Status": "Running"
-      }
-  
-      return res.send(status)
-  });
+   router.get("/random", middleware.ensureAuthenticated, controller.randomUserAnswers);
    
    return router;
 };
