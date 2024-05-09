@@ -4,6 +4,8 @@ class Router {
     routeHistory = [];
     #templatesXml = null;
     uriHandlerClosure = null;
+    #mountedScripts = []
+    #scriptsToMount = []
     static default404 = {
         title: "404 Not Found",
         template: "default-404"
@@ -37,18 +39,37 @@ class Router {
         };
     }
     async getTemplates() {
-        let xmlStr = await fetch(`${window.location.origin}/templates.xml`).then((response) => response.text());
+        let xmlStr = await fetch(`${window.location.origin}/templates`).then((response) => response.text());
         this.#templatesXml = new DOMParser().parseFromString(xmlStr, "text/xml");
     }
     updateHtml(templateId, title) {
+        this.unmountScripts();
         let templateBody = this.#templatesXml.getElementById(templateId);
         console.log(templateId);
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
         for(let child of templateBody.childNodes) {
-            appContainer.appendChild(child);
+            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent)
+            else appContainer.appendChild(child);
         }
         document.title = title;
+        this.mountScripts()
+    }
+    mountScripts() {
+        for(let idx=0; idx < this.#scriptsToMount.length; idx++) {
+            script = document.createElement("script");
+            script.id = `custom-script-${idx}`;
+            script.appendChild(document.createTextNode(this.#scriptsToMount[idx]));
+            this.#mountedScripts.push(script);
+            document.body.appendChild(script);
+        }
+        this.#scriptsToMount = []
+    }
+    unmountScripts() {
+        for(let script of this.#mountedScripts) {
+            document.body.removeChild(script);
+        }
+        this.#mountedScripts = []
     }
     async start() {
         window.addEventListener("hashchange", this.uriHandlerClosure);
