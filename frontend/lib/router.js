@@ -45,6 +45,9 @@ class Router {
     updateHtml(templateId, title) {
         this.unmountScripts();
         let templateBody = this.#templatesXml.getElementById(templateId);
+        for (let child of templateBody.childNodes) {
+            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent);
+        }
         templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
@@ -53,7 +56,7 @@ class Router {
             let child = templateBody.childNodes[idx];
             console.log(templateBody.childNodes[idx]);
             if (child.tagName.toLowerCase() === "script") {
-                this.#scriptsToMount.push(child.textContent);
+                // continue, we've already added it
                 idx++;
             }
             else appContainer.appendChild(child);
