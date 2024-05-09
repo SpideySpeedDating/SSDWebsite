@@ -24,5 +24,9 @@ const router = new Router({
     "dating-screen" : {
         title: "Dating Time!",
         template: "/templates/dating-screen.html"
-    }
+    },
+    "dating-info" : {
+        title: "Contact Us",
+        template: "/templates/dating-info.html"
+    },
 }, {});
