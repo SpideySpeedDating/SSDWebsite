@@ -29,4 +29,8 @@ const router = new Router({
         title: "Contact Us",
         template: "/templates/dating-info.html"
     },
+    "congrats" : {
+        title: "Contact Us",
+        template: "/templates/congrats.html"
+    },
 }, {});

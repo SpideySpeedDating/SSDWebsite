@@ -145,6 +145,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   align-self: flex-start;
+  padding: 1rem;
 }
 
 nav .links {
