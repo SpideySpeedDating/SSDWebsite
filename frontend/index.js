@@ -12,5 +12,17 @@ const router = new Router({
     "login" : {
         title: "Login",
         template: "/templates/login.html"
+    },
+    "info" : {
+        title: "Information",
+        template: "/templates/info.html"
+    },
+    "question" : {
+        title: "Questions",
+        template: "/templates/question.html"
+    },
+    "dating-screen" : {
+        title: "Dating Time!",
+        template: "/templates/dating-screen.html"
     }
 }, {});
