@@ -20,7 +20,7 @@ class App {
                 let dmb = new DomBuilder(
                     this.readFile(`${path.join(this.inputDir as string, filename)}`), filename.split(".")[0]);
                 this.outputHtml += `${dmb.getHtml()}\n`;
-                this.outputCss += `${dmb.getCss()}\n`;
+                this.outputCss = `${this.outputCss.trim()}${dmb.getCss()}\n`;
             }
         }
     }
@@ -36,7 +36,7 @@ class App {
 
     private writeToFile() {
         fs.writeFileSync(path.join(this.templateOutputDir, "templates.xml"), `<templates>\n${this.outputHtml}</templates>`);
-        fs.writeFileSync(path.join(this.cssOutputDir, "stylespack.css"), this.outputCss);
+        fs.writeFileSync(path.join(this.cssOutputDir, "stylespack.css"), this.outputCss.trim());
     }
 }
 
