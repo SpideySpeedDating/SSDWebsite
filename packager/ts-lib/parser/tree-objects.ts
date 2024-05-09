@@ -24,8 +24,6 @@ class TesseraTextNode extends TesseraNodeBase<string> {
     get text(): string {
         return this.children[0];
     }
-
-
 }
 
 interface TesseraTextNodeOptions extends TesseraNodeInterface<string> {
@@ -39,26 +37,28 @@ class ParserAttributeError extends ParserError {
 }
 class Attributes {
 
+    private _attributes: {[key: string] : string } = {}
+
     private constructor(attrString: string) {
         let attrs = attrString.matchAll(Utils.regExp.attributes) || [];
         for(var results of attrs) {
             let groups = (results.groups as {[key: string] : string});
             if (Utils.isNullOrUndefined(groups["key"]) || Utils.isNullOrUndefined(groups["val"])) 
                 throw new ParserAttributeError(`Invalid attribute string: ${attrString}`);
-            Object.defineProperty(this, groups["key"], {value: groups["val"]});
+            this._attributes[groups["key"]] = groups["val"]
         };
     }
 
     public toString(): string {
         let output = ""; 
-        for (let keyVal of Object.entries(this)) {
+        for (let keyVal of Object.entries(this._attributes)) {
             output += `${keyVal[0]}="${keyVal[1]}" `;
         }
-        return output;
+        return output.trim();
     }
 
     public set(key: string, val: string) {
-        Object.defineProperty(this, key, {value: val});
+        this._attributes[key] = val;
     }
 
     public static create(attrsString: string | undefined): Attributes | undefined {
@@ -91,15 +91,17 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
     }
 
     public render(): string {
-        let open = `${this.html}`;
+        let attributeStr = (Utils.isNullOrUndefined(this.attributes)) ? "" : (this.attributes as Attributes).toString();
+        let open = `${this.html.replace(Utils.regExp.attributes, "")}`.trim();
+        open = `${open.replace(">", ((attributeStr === "") ? "" : " " + attributeStr) + ">")}`
         let inner = "";
         if (this.children.length > 0) {
             for(let child of this.children) {
-                inner += (child instanceof TesseraTextNode) ? child.text : child.render();
+                inner += (child instanceof TesseraTextNode) ? child.text.trim() : child.render();
             };
         } 
         let close = `${(this.isSelfClosing ? "" : "</"+this.tagName+">")}`;
-        return `${open} ${inner} ${close}`;
+        return `${open}${inner}${close}`;
     }
 }
 

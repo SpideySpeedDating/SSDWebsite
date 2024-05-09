@@ -6,8 +6,8 @@ import path from "path";
 import fs from "fs";
 
 class App {
-    private outputDir: string | undefined = "";
-    private inputDir: string | undefined = "";
+    private outputDir: string | undefined = "./packager/ts-lib/test_out";
+    private inputDir: string | undefined = "./packager/ts-lib/test_html";
     private outputHtml: string = "";
     private outputCss: string = "";
 
@@ -31,9 +31,10 @@ class App {
         for(let filename of files) {
             if (path.extname(filename) === ".html") {
                 console.log(filename);
-                let dmb = new DomBuilder(this.readFile(`${path.join(this.inputDir as string, filename)}`), filename);
-                this.outputHtml += dmb.getHtml();
-                this.outputCss += dmb.getCss();
+                let dmb = new DomBuilder(
+                    this.readFile(`${path.join(this.inputDir as string, filename)}`), filename.split(".")[0]);
+                this.outputHtml += `${dmb.getHtml()}\n`;
+                this.outputCss += `${dmb.getCss()}\n`;
             }
         }
     }
@@ -50,7 +51,7 @@ class App {
     }
 
     private writeToFile() {
-        fs.writeFileSync(path.join(this.outputDir as string, "templates.xml"), `<templates>${this.outputHtml}</templates>`);
+        fs.writeFileSync(path.join(this.outputDir as string, "templates.xml"), `<templates>\n${this.outputHtml}</templates>`);
         fs.writeFileSync(path.join(this.outputDir as string, "stylespack.css"), this.outputCss);
     }
 }
