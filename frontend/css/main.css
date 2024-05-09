@@ -199,6 +199,10 @@ button {
   outline: 0;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 /* --- Home Page --- */
 
 #home-page {
