@@ -1,7 +1,7 @@
 import { Attributes, TesseraTagNode, TesseraTextNode, ParserAttributeError, Groups } from "./tree-objects";
 import { ParserError } from "./errors";
 import { Utils } from "./uitls";
-import { CssBuilderSingleton, JsBuilderSingleton } from "./css-js-file-builder";
+import { CssBuilder } from "./css-js-file-builder";
 
 
 class DomBuilder {
@@ -17,8 +17,7 @@ class DomBuilder {
         open: DomBuilder.processOpenTag,
         close: DomBuilder.processCloseTag
     };
-    private cssBuilder: CssBuilderSingleton = CssBuilderSingleton.Instance;
-    private jsBuilder: JsBuilderSingleton = JsBuilderSingleton.Instance;
+    private cssBuilder: CssBuilder = new CssBuilder();
 
     private nodes: TesseraTagNode[];
 
@@ -31,7 +30,7 @@ class DomBuilder {
     private static processOpenTag(htmlDom: DomBuilder, groups: Groups, len: number, htmlStr: string) {
         let tagName = groups["o_name"].trim();
         let isSelfClosing = groups["closingBracket"] === "/>" || Utils.SelfClosingTagsWithoutBackSlash.has(tagName);
-        let attributesString = groups["attrs"];
+        let attributesString = groups["open"];
         let html = htmlStr.replace(/[\s\n\r\t]+/g, " ");
         try {
             let node = new TesseraTagNode({
@@ -87,12 +86,6 @@ class DomBuilder {
             this.cssBuilder.prependTags({file: this.htmlId, tree: node});
             return;
         }
-        if (this.jsBuilder.captureTags.has(node.tagName)) {
-            this.jsBuilder.prependTags({file: this.htmlId, tree: node});
-            let attributes = node.attributes as Attributes;
-            if (!Object.keys(attributes).includes("src")) return;
-            node.children.splice(0, node.children.length);
-        }
         if (this.nodes.length == 0) this.tree = node;
         else this.nodes[this.nodes.length - 1].children.push(node);
     }
@@ -109,13 +102,20 @@ class DomBuilder {
         }
     }
 
-    public build(): TesseraTagNode | undefined{
+    private build(): TesseraTagNode | undefined{
         if (Utils.isNullOrUndefined(this.tree)) this.processTags();
-        this.cssBuilder.outputToFile("", this.htmlId);
-        this.tree?.attributes?.set("id", this.htmlId);
-        this.jsBuilder.outputToFile("", this.htmlId);
-        console.log(this.tree?.render());
+        if (Utils.isNullOrUndefined(this.tree?.attributes)) 
+            (this.tree as TesseraTagNode).attributes = Attributes.create(`id=${this.htmlId}`);
+        else this.tree?.attributes?.set("id", this.htmlId);
         return this.tree;
+    }
+
+    public getCss(): string {
+        return this.cssBuilder.outputToString();
+    }
+
+    public getHtml(): string {
+        return this.build()?.render() || "";
     }
 }
 

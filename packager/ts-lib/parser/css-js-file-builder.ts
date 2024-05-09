@@ -17,18 +17,17 @@ abstract class LangBuilder {
         }
     }
 
-    public outputToFile(outputDir: string, styleId: string) {
+    public outputToString() {
         let outputStr = "";
         for (let fileId of Object.keys(this.fileTagsMap)) {
             outputStr += this.getOutputString(fileId);
         }
-        console.log(outputStr.trim());
+        return outputStr.trim();
     }
 }
 
-class CssBuilderSingleton extends LangBuilder {
-    private constructor() { super(); }
-    public static Instance: CssBuilderSingleton  = new CssBuilderSingleton();
+class CssBuilder extends LangBuilder {
+    constructor() { super(); }
     public override readonly captureTags = new Set<string>(["link", "style"]);
     override fileTagsMap: { [key: string] : string} = {};
     public override getOutputString(fileId: string): string {
@@ -36,14 +35,4 @@ class CssBuilderSingleton extends LangBuilder {
     }
 }
 
-class JsBuilderSingleton extends LangBuilder {
-    private constructor() { super(); }
-    public static Instance: CssBuilderSingleton  = new JsBuilderSingleton();
-    public override readonly captureTags = new Set<string>(["script", "style"]);
-    override fileTagsMap: { [key: string] : string} = {};
-    public override getOutputString(fileId: string): string {
-        return `(()=>{ ${this.fileTagsMap[fileId]}})()\n`;    
-    }
-}
-
-export { CssBuilderSingleton, JsBuilderSingleton }
+export { CssBuilder }

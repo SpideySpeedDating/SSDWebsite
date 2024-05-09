@@ -1,41 +1,59 @@
 import {DomBuilder} from "./parser/dom-builder";
+import { ParserError } from "./parser/errors";
+import {Groups} from "./parser/tree-objects";
+import { Utils } from "./parser/uitls";
+import path from "path";
+import fs from "fs";
 
+class App {
+    private outputDir: string | undefined = "./packager/ts-lib/test_out";
+    private inputDir: string | undefined = "./packager/ts-lib/test_html";
+    private outputHtml: string = "";
+    private outputCss: string = "";
 
+    constructor() {
+        for (let arg of process.argv) {
+            for(let match of arg.matchAll(Utils.regExp.attributes))
+            {
+                let groups: Groups = (match.groups as Groups);
+                if (groups["key"] === "inputDir") this.inputDir = groups["value"]
+                if (groups["key"] === "outpuDir") this.outputDir = groups["value"]
+            }
+        }
 
-// class App {
-//     private outputDir: string;
-//     private inputDir: string;
+        if(Utils.isNullOrUndefined(this.inputDir)) throw new ParserError("No inputDir argument found");
+        if(Utils.isNullOrUndefined(this.outputDir)) throw new ParserError("No outputDir argument found");
+    }
 
-//     constructor() {
-//         for (let arg of process.argv) {
-            
-//         }
-//     }
-// }
+    private processFiles() {
+        let inputDir = this.inputDir as string;
+        let files = fs.readdirSync(inputDir);
+        for(let filename of files) {
+            if (path.extname(filename) === ".html") {
+                console.log(filename);
+                let dmb = new DomBuilder(this.readFile(`${path.join(this.inputDir as string, filename)}`), filename);
+                this.outputHtml += dmb.getHtml();
+                this.outputCss += dmb.getCss();
+            }
+        }
+    }
 
+    private readFile(filepath: string): string {
+        let output = fs.readFileSync(filepath, 'utf8');
+        console.log(output);
+        return output;
+    }
 
-new DomBuilder(`
-<!DOCTYPE html>
-<html lang="en">
-		<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Document</title>
-		</head>
-		<!--Comment Nyana wabo-->
-		<body>
-                <div><div>
-				<section id="app-container">
-					Default Text
-				</section>
-				<script src="index.js" type="module">
-					Console.log("Hello World");
-				</script>
-                <style>
-                    div {
-                        color: blue;
-                    }
-                </style>
-		</body>
-</html>
-`, "document.html").build();
+    public build() {
+        this.processFiles();
+        this.writeToFile();
+    }
+
+    private writeToFile() {
+        fs.writeFileSync(path.join(this.outputDir as string, "templates.xml"), `<templates>${this.outputHtml}</templates>`);
+        fs.writeFileSync(path.join(this.outputDir as string, "stylespack.css"), this.outputCss);
+    }
+}
+
+let app = new App();
+app.build();

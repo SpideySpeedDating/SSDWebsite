@@ -40,7 +40,7 @@ class ParserAttributeError extends ParserError {
 class Attributes {
 
     private constructor(attrString: string) {
-        let attrs = attrString?.matchAll(Utils.regExp.attributes) || [];
+        let attrs = attrString.matchAll(Utils.regExp.attributes) || [];
         for(var results of attrs) {
             let groups = (results.groups as {[key: string] : string});
             if (Utils.isNullOrUndefined(groups["key"]) || Utils.isNullOrUndefined(groups["val"])) 
@@ -98,7 +98,7 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
                 inner += (child instanceof TesseraTextNode) ? child.text : child.render();
             };
         } 
-        let close = `${(this.isSelfClosing ? "" : "<"+this.tagName+"/>")}`;
+        let close = `${(this.isSelfClosing ? "" : "</"+this.tagName+">")}`;
         return `${open} ${inner} ${close}`;
     }
 }
