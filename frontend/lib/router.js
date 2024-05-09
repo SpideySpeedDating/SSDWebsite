@@ -46,9 +46,12 @@ class Router {
         this.unmountScripts();
         let templateBody = this.#templatesXml.getElementById(templateId);
         for (let child of templateBody.childNodes) {
-            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent);
+            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"));
         }
+
+        console.log(templateBody)
         templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
+        console.log(templateBody)
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
         // .appendChild consumes the child from the template body
@@ -56,7 +59,6 @@ class Router {
             let child = templateBody.childNodes[idx];
             console.log(templateBody.childNodes[idx]);
             if (child.tagName.toLowerCase() === "script") {
-                // continue, we've already added it
                 idx++;
             }
             else appContainer.appendChild(child);
