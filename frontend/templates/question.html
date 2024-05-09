@@ -24,9 +24,8 @@
       if (window.questions === undefined || window.questions === null) {
         window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions").then((response)=>{response.json()});
         window.currQuestionIdx = 0;
-      } else {
-        renderCurrentQuestion();
       }
+      renderCurrentQuestion();
     }
     async function updateToNextQuestion(e) {
       e.preventDefault();
