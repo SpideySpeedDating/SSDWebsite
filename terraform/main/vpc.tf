@@ -54,7 +54,14 @@ module "vpc_sg" {
       protocol    = "tcp"
       description = "Spidey Speed Dating HTTPS Port"
       cidr_blocks = "0.0.0.0/0"
-    }
+    },
+    {
+      from_port   = 5000
+      to_port     = 5000
+      protocol    = "tcp"
+      description = "Spidey Speed Dating API Port"
+      cidr_blocks = "0.0.0.0/0"
+    },
   ]
   egress_with_cidr_blocks = [
     {
