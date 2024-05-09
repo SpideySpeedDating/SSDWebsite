@@ -59,10 +59,12 @@ module.exports = {
     findUserAnswer: async (req, res) => {
         try {
             const authId = req.authId;
-            const questionId = req.question_id;
+            const questionId = req.body.question_id;
 
             const user = await usersService.findUserByAuthId(authId);
             console.log("user: " + user);
+            console.log("user_id: " + user.user_id);
+            console.log("question_id: " + questionId);
             const userQuestion = await userQuestionService.findUserQuestion({user_id: user.user_id, question_id: questionId});
             console.log("userQuestion: " + userQuestion);
             const answer = await answersService.findAnswer(userQuestion);
