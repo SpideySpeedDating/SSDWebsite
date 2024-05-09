@@ -21,4 +21,5 @@ app.use("/img", express.static(path.resolve(__dirname, "img")));
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
+  console.log(`http://localhost:${port}`)
 })
