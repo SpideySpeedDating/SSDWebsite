@@ -57,7 +57,7 @@ class Router {
     }
     mountScripts() {
         for(let idx=0; idx < this.#scriptsToMount.length; idx++) {
-            script = document.createElement("script");
+            let script = document.createElement("script");
             script.id = `custom-script-${idx}`;
             script.appendChild(document.createTextNode(this.#scriptsToMount[idx]));
             this.#mountedScripts.push(script);
