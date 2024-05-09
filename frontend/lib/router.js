@@ -45,11 +45,17 @@ class Router {
     updateHtml(templateId, title) {
         this.unmountScripts();
         let templateBody = this.#templatesXml.getElementById(templateId);
-        console.log(templateId);
+        templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
-        for(let child of templateBody.childNodes) {
-            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent)
+        // .appendChild consumes the child from the template body
+        for(let idx=0; idx < templateBody.childNodes.length; idx) {
+            let child = templateBody.childNodes[idx];
+            console.log(templateBody.childNodes[idx]);
+            if (child.tagName.toLowerCase() === "script") {
+                this.#scriptsToMount.push(child.textContent);
+                idx++;
+            }
             else appContainer.appendChild(child);
         }
         document.title = title;
