@@ -6,7 +6,7 @@ async function auth(req, res) {
   
   console.log(authorization)
   if (!authorization) {
-    return res.status(401).send({ message: 'code' });
+    return res.status(401).send({ message: 'no code' });
   }
   const code = authorization.split(' ')[1];
   const access_token = await middleware.exchangeCodeForAccessToken(code);

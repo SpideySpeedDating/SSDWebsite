@@ -87,7 +87,7 @@ async function getGitHubUserData(accessToken) {
 async function exchangeCodeForAccessToken(code) {
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
-
+  console.log(clientId);
   return new Promise((resolve, reject) => {
     const options = {
       hostname: 'github.com',
