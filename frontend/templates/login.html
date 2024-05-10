@@ -4,30 +4,45 @@
   <script>
     console.log("loaded");
     const urlParams = new URLSearchParams(window.location.search);
-    code = urlParams.getAll("code");
+    const code = urlParams.get("code");
+
+    const client_id = "your-client-id";
+    const client_secret = "your-client-secret";
 
     const githubRequestOptions = {
-      mode: 'no-cors',
-      headers: {
-        accept: "application/json",
-      }
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            client_id,
+            client_secret,
+            code
+        })
     };
-    let client_id = "Ov23li96pnWfFYn2p8gE";
-    let client_secret = "a529ee53cafc77f9f179dbaece7d3e0d7cad2eda";
+
     console.log("fetching");
-    fetch(`https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&amp;code=${code}`, githubRequestOptions).then((response) => {
-      console.log(response);
-      const apiRequestOptions = {
-        "method": "GET",
-        "headers": {
-          "Authorization": "Bearer " + token,
-        }
-      }
-      fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com/auth", apiRequestOptions).then((response) => {
-        console.log(response);
-      });
-    });
+    fetch('https://github.com/login/oauth/access_token', githubRequestOptions)
+    .then(response => response.json())
+    .then(data => {
+        const accessToken = data.access_token;
+        console.log("Access Token:", accessToken);
 
+        const apiRequestOptions = {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        };
 
-  </script>
+        fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com/auth", apiRequestOptions)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => console.error("Error fetching API:", error));
+    })
+    .catch(error => console.error("Error fetching access token:", error));
+</script>
+
 </body>
