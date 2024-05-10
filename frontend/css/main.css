@@ -207,6 +207,18 @@ textarea:focus-visible {
   outline: 0;
 }
 
+/* Hides the number thing on the right side */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* --- buttons --- */
 button {
   border-radius: 4px;
