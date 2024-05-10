@@ -24,5 +24,10 @@
     let github_login = document.getElementById("github-login");
     console.log(github_login);
     github_login.addEventListener('click', navigateToGithubLogin);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.size != 0) {
+      window.location.search = "";
+    }
   </script>
 </body>
