@@ -1,44 +1,50 @@
 <body>
   <h1>Login Page!</h1>
 
+  <a href="#"><button id="back-to-home">Back to Home</button></a>
+
   <script>
     console.log("loaded");
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
+    options = {
+        headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000"
+        }
+    }
 
-    const client_id = "your-client-id";
-    const client_secret = "your-client-secret";
-
-    const githubRequestOptions = {
-        method: 'POST',
-        headers: JSON.stringify({
-            client_id,
-            client_secret,
-            code
-        })
-    };
-
-    console.log("fetching");
-    fetch('https://github.com/login/oauth/access_token', githubRequestOptions)
-    .then(response => response.json())
-    .then(data => {
-        const accessToken = data.access_token;
-        console.log("Access Token:", accessToken);
-
-        const apiRequestOptions = {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        };
-
-        fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com/auth", apiRequestOptions)
+    fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/status", options)
         .then(response => {
             console.log(response);
         })
         .catch(error => console.error("Error fetching API:", error));
+        
+    authOptions = {
+        headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+            "Authorization" : code
+        }
+    }
+
+    console.log("fetching");
+    fetch(`http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/auth`, authOptions)
+        .then(response => {
+            console.log(response);
+            response.json().then((data) => {
+                localStorage.setItem("jwt", data["accessToken"]);
+                window.location.search = "";
+                window.location.hash = "";
+            }).catch(() => {
+                console.log("Couldn't parse the JSON");
+            });
+        })
+        .catch(error => console.error("Error fetching API:", error));
+
+    backToHome = document.getElementById("back-to-home");
+    backToHome.addEventListener('click', () => {
+        window.location.search = "";
+        window.location.hash = "";
     })
-    .catch(error => console.error("Error fetching access token:", error));
 </script>
 
 </body>
