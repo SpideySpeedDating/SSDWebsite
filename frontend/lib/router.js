@@ -49,15 +49,12 @@ class Router {
             if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"));
         }
 
-        console.log(templateBody)
         templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
-        console.log(templateBody)
         let appContainer = document.getElementById("app-container");
         appContainer.innerHTML = "";
         // .appendChild consumes the child from the template body
         for(let idx=0; idx < templateBody.childNodes.length; idx) {
             let child = templateBody.childNodes[idx];
-            console.log(templateBody.childNodes[idx]);
             if (child.tagName.toLowerCase() === "script") {
                 idx++;
             }
