@@ -1,5 +1,5 @@
-import { ParserError } from "./errors.js";
-import { Utils } from "./uitls.js";
+import { ParserError } from "./errors";
+import { Utils } from "./uitls";
 class TesseraNodeBase {
 }
 class TesseraTextNode extends TesseraNodeBase {
@@ -68,7 +68,7 @@ class TesseraTagNode extends TesseraNodeBase {
         open = `${open.replace(endBracket, ((attributeStr === "") ? "" : " " + attributeStr) + endBracket)}`;
         let inner = "";
         for (let child of this.children) {
-            inner += (child instanceof TesseraTextNode) ? child.text.replaceAll("&", "&amp;").replaceAll("<", " &lt;").replaceAll(">", "&gt;") : child.render();
+            inner += (child instanceof TesseraTextNode) ? child.text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;") : child.render();
         }
         ;
         if (this.tagName === "textarea" && inner === "")

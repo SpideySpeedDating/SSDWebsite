@@ -97,7 +97,7 @@ class TesseraTagNode extends TesseraNodeBase<TesseraTagNode | TesseraTextNode> {
         open = `${open.replace(endBracket, ((attributeStr === "") ? "" : " " + attributeStr) + endBracket)}`
         let inner = "";
         for(let child of this.children) {
-            inner += (child instanceof TesseraTextNode) ? child.text.replaceAll("&", "&amp;").replaceAll("<" ," &lt;").replaceAll(">", "&gt;") : child.render();
+            inner += (child instanceof TesseraTextNode) ? child.text.replaceAll("&", "&amp;").replaceAll("<" ,"&lt;").replaceAll(">", "&gt;") : child.render();
         };
         if (this.tagName === "textarea" && inner === "") inner = " ";
         let close = `${(this.isSelfClosing ? "" : "</"+this.tagName+">")}`;
