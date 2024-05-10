@@ -209,7 +209,11 @@
           headers: {
             "Authorization": localStorage.getItem("jwt")
           }
-        }).then((response)=&gt;{response.json()});
+        }).then((response) =&gt; {
+          response.json((data) =&gt; {
+            window.questions = data;
+          })
+        });
         window.currQuestionIdx = 0;
       }
       renderCurrentQuestion();
@@ -246,7 +250,7 @@
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": localStorage.getItem("jwt")
         }
-      }).then(() =&gt; {wondow.answer = answer});
+      }).then(() =&gt; {window.answer = answer});
     }
     textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);

@@ -28,7 +28,11 @@
           headers: {
             "Authorization": localStorage.getItem("jwt")
           }
-        }).then((response)=>{response.json()});
+        }).then((response) => {
+          response.json((data) => {
+            window.questions = data;
+          })
+        });
         window.currQuestionIdx = 0;
       }
       renderCurrentQuestion();
@@ -65,7 +69,7 @@
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": localStorage.getItem("jwt")
         }
-      }).then(() => {wondow.answer = answer});
+      }).then(() => {window.answer = answer});
     }
     textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
