@@ -182,7 +182,11 @@
     console.log("fetching");
     fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/auth", authOptions)
         .then(response =&gt; {
-            localStorage.setItem("jwt", response.body);
+            response.text().then(token =&gt; {
+                localStorage.setItem("jwt", token);
+            }).catch(error =&gt; {
+                console.error("Error retrieving token:", error);
+            });
             window.location.hash = "";
         })
         .catch(error =&gt; console.error("Error fetching API:", error));
