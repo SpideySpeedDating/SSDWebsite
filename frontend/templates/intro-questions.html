@@ -11,7 +11,7 @@
   
       <span id="users-age-box">
         <label for="users-age">How old are you?</label>
-        <input id="users-age"/>
+        <input id="users-age" type="number"/>
       </span>
   
       <span id="users-gender-box">
@@ -27,4 +27,27 @@
       <button type="submit">Submit</button>
     </form>
   </main>
+  <script>
+    function submitForm(e) {
+
+      usersName = document.getElementById("users-name").value;
+      usersAge = document.getElementById("users-age").value;
+      usersGender = document.getElementById("users-gender").value;
+      usersOrientation = document.getElementById("users-orientation").value;
+
+      let options = {
+        method: "POST",
+        body: {
+            "username": usersName,
+            "gender": usersGender,
+            "sexuality": usersOrientation,
+            "age": usersAge
+        }
+      }
+      window.location.href = "#dating-info";
+    }
+    
+    form = document.getElementById("intro-questions-form");
+    form.addEventListener('submit', submitForm);
+  </script>
 </body>
