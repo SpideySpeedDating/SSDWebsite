@@ -4,10 +4,46 @@
 <body id="dating-screen"><header><h2>Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="question-box">Were you breastfed as a child?
     </span><div  id="spider-container"><button  id="spider-1" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-2" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-3" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-4" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-5" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-6" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-7" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-8" class="spider-button"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button></div></main><footer><button>BACK TO HOME</button></footer></body>
 <body id="default-404"><h1>Default-404! (whoopsie daisy🕸️)</h1></body>
-<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#login" id="github-login">Login with GitHub</a></div></nav><main  id="home-page"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1></main><footer><a  href="#info">Not sure how it works? Click here!</a><button>next page</button></footer></div></body>
+<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#login" id="github-login">Login with GitHub</a></div></nav><main  id="home-page"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1></main><footer><a  href="#info">Not sure how it works? Click here!</a><button>next page</button></footer></div><script>function navigateToGithubLogin(event) {
+      event.preventDefault();
+      console.log("hi");
+      window.navigation.navigate("https://github.com/login/oauth/authorize?client_id=Ov23li96pnWfFYn2p8gE&amp;redirect_uri=http://localhost:3000/#login");
+    }
+
+    let github_login = document.getElementById("github-login");
+    console.log(github_login);
+    github_login.addEventListener('click', navigateToGithubLogin);
+  </script></body>
 <body id="info"><header><h2>Welcome to our dating platform!</h2></header><main  id="info-page" class="flex-container flex-column flex-center-column"><p>Here's a quick guide on how everything works:</p><ol><li>Create Your Profile: First things first, set up your profile! Tell us about yourself, and answer some fun questions. Once you're done, hit that "Create Profile" button.</li><li>Get Ready to Date: Once your profile is set, you're ready to dive into the dating world! Click on the "Start Dating" button to begin.</li><li>Meet the "Insects": In the dating game, you'll find yourself in a web with other users represented as insects. Don't worry, it's all in good fun! Each "round" will present a question, and you'll see the answers from the other users.</li><li>Navigate the Web: The spider, that's you, will eliminate one insect at a time based on their answers. It's kind of like a game of elimination! 🕷️ Bye-bye bugs!</li><li>Find Your Match: As the rounds progress, users will be eliminated until there's only one left standing. The spider, that's still you, will then get the remaining user's info, like email address.</li></ol><p>And that's it! It's a fun way to meet new people and see who you vibe with. So go ahead, give it a try and see who you catch in your web! 🕸️</p></main><footer><a  href="#"><button>BACK TO HOME</button></a></footer></body>
 <body id="intro-questions"><header><h2>Tell us about yourself!</h2></header><main  id="intro-questions"><form  id="intro-questions-form"><span  id="users-name-box"><label  for="users-name">What's your name?</label><input  id="users-name"/></span><span  id="users-age-box"><label  for="users-age">How old are you?</label><input  id="users-age"/></span><span  id="users-gender-box"><label  for="users-gender">How do you identify your gender?</label><input  id="users-gender"/></span><span  id="users-orientation-box"><label  for="users-orientation">What's your sexual orientation?</label><input  id="users-orientation"/></span><button  type="submit">Submit</button></form></main></body>
-<body id="login"><h1>Login Page!</h1></body>
+<body id="login"><h1>Login Page!</h1><script>console.log("loaded");
+    const urlParams = new URLSearchParams(window.location.search);
+    code = urlParams.getAll("code");
+
+    const githubRequestOptions = {
+      mode: 'no-cors',
+      headers: {
+        accept: "application/json",
+      }
+    };
+    let client_id = "Ov23li96pnWfFYn2p8gE";
+    let client_secret = "a529ee53cafc77f9f179dbaece7d3e0d7cad2eda";
+    console.log("fetching");
+    fetch(`https://github.com/login/oauth/access_token?client_id=${client_id}&amp;client_secret=${client_secret}&amp;code=${code}`, githubRequestOptions).then((response) => {
+      console.log(response);
+      const apiRequestOptions = {
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer " + token,
+        }
+      }
+      fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com/auth", apiRequestOptions).then((response) => {
+        console.log(response);
+      });
+    });
+
+
+  </script></body>
 <body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button  id="question-footer-button">NEXT QUESTION</button></footer><script>function resizeTextArea() {
       textarea = document.getElementById("question-input");
       textarea.style.height = "";

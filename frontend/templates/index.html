@@ -14,4 +14,15 @@
       <a href="#intro-questions"><button>next page</button></a>
     </footer>
   </div>
+  <script>
+    function navigateToGithubLogin(event) {
+      event.preventDefault();
+      console.log("hi");
+      window.location.href = "https://github.com/login/oauth/authorize?client_id=Ov23li96pnWfFYn2p8gE&redirect_uri=http://localhost:3000/#login";
+    }
+
+    let github_login = document.getElementById("github-login");
+    console.log(github_login);
+    github_login.addEventListener('click', navigateToGithubLogin);
+  </script>
 </body>
