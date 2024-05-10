@@ -18,8 +18,8 @@ module.exports = {
     const client = await pool.connect();
     try {
       const { rows } = await client.query(
-        'SELECT * FROM user_questions WHERE user_question_id = $1',
-        [query.user_question_id]
+        'SELECT * FROM user_questions WHERE user_id = $1 AND question_id = $2',
+        [query.user_id, query.question_id]
       );
       return rows[0];
     } finally {
@@ -27,10 +27,10 @@ module.exports = {
     }
   },
 
-  findAllUserQuestions: async () => {
+  findAllUserQuestions: async (user) => {
     const client = await pool.connect();
     try {
-      const { rows } = await client.query('SELECT * FROM user_questions');
+      const { rows } = await client.query('SELECT * FROM user_questions WHERE user_id = $1', [user.user_id]);
       return rows;
     } finally {
       client.release();

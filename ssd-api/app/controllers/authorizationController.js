@@ -6,27 +6,20 @@ async function auth(req, res) {
   
   console.log(authorization)
   if (!authorization) {
-    return res.status(401).send({ message: 'no token' });
+    return res.status(401).send({ message: 'no code' });
+  }
+  const code = authorization.split(' ')[1];
+  const access_token = await middleware.exchangeCodeForAccessToken(code);
+  if(!access_token)
+  {
+    return res.status(401).send({ message: 'no access token' });
   }
 
-  const access_token = authorization.split(' ')[1];
   const userData = await middleware.getGitHubUserData(access_token);
-                                      // .then(userInfo => {
-                                      //     console.log('User ID:', userInfo.userId);
-                                      //     console.log('User Email:', userInfo.userEmail);
-                                      // })
-                                      // .catch(error => {
-                                      //     console.error(error);
-                                      // });
-  
   const authId = userData.userId;
   const userEmail = userData.userEmail;
 
-  console.log('User ID:', authId);
-  console.log('User Email:', userEmail);
-
   const user = await usersService.findUserByAuthId(authId);
-  console.log(user);
   if (!user){
     await usersService.createUser(
       authId,
@@ -37,10 +30,7 @@ async function auth(req, res) {
           sexuality: null,
           age: null
       });
-    
-      console.log("What.");
     }
-
   res.send(middleware.createJWT({
     access_token: access_token,
     authId: authId,

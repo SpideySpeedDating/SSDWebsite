@@ -145,6 +145,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   align-self: flex-start;
+  padding: 1rem;
 }
 
 nav .links {
@@ -157,6 +158,21 @@ nav .links a {
 
 nav .links a:visited {
   color: var(--text-4-color); 
+}
+
+/* --- header --- */
+
+#app-container header:has(+ main):first-child {
+  margin-top: 2rem;
+  margin-bottom: auto;
+}
+
+header > h1,
+header > h2,
+header > h3,
+header > h4,
+header > h5 {
+  text-align: center;
 }
 
 /* --- footer --- */
@@ -191,6 +207,18 @@ textarea:focus-visible {
   outline: 0;
 }
 
+/* Hides the number thing on the right side */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* --- buttons --- */
 button {
   border-radius: 4px;
@@ -212,6 +240,7 @@ button:hover {
 
 #home-page h1 {
   align-self: center;
+  text-align: center;
   text-transform: uppercase;
   padding: 1rem;
 }
@@ -248,22 +277,12 @@ button:hover {
 
 /* --- Info page --- */
 
-/* Header isn't part of the main thing called an info page? */
-header:has(+ #info-page) h2 {
-  text-align: center;
-  padding: 0.5rem 1rem;
-}
-
 header:has(+ #info-page) h2::after,
 header:has(+ #info-page) h2::before {
   content: "🎉";
 }
 
 /* --- Question page --- */
-header:has(+ #question-page):first-child {
-  margin-top: 2rem;
-  margin-bottom: auto;
-}
 
 #question-page textarea {
   width: 80%;
@@ -314,4 +333,48 @@ header:has(+ #question-page):first-child {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+}
+/* --- Intro Questions Page --- */
+#intro-questions #intro-questions-form {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+  align-items: flex-end;
+}
+
+#intro-questions > form > span {
+  flex-basis: 20ch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#intro-questions label {
+  text-align: center;
+}
+
+#intro-questions > form > span:nth-child(1) {
+  flex-grow: 4;
+}
+
+#intro-questions > form > span:nth-child(2) {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 15ch;
+}
+
+#intro-questions > form > span:nth-child(3) {
+  flex-grow: 1;
+}
+
+#intro-questions > form > span:nth-child(4) {
+  flex-grow: 1;
+}
+
+#intro-questions input {
+  width: 90%;
 }

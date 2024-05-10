@@ -3,30 +3,36 @@ import { Router } from "./lib/router.js";
 const router = new Router({
     "/" : {
         title: "Home",
-        template: "/templates/index.html"
-    },
-    "contact-us" : {
-        title: "Contact Us",
-        template: "/templates/contact-us.html"
+        template: "index"
     },
     "login" : {
         title: "Login",
-        template: "/templates/login.html"
+        template: "login"
+    },
+    "intro-questions" : {
+        title: "Intro Questions",
+        template: "intro-questions"
     },
     "info" : {
         title: "Information",
-        template: "/templates/info.html"
+        template: "info"
     },
     "question" : {
         title: "Questions",
-        template: "/templates/question.html"
+        template: "question"
     },
     "dating-screen" : {
         title: "Dating Time!",
-        template: "/templates/dating-screen.html"
+        template: "dating-screen"
     },
     "dating-info" : {
-        title: "Contact Us",
-        template: "/templates/dating-info.html"
+        title: "Dating-info",
+        template: "dating-info"
     },
-}, {});
+    "congrats" : {
+        title: "Congrats",
+        template: "congrats"
+    }
+});
+
+await router.start();

@@ -7,7 +7,7 @@ module.exports = {
             const responseBody = req.body;
 
             const createdUser = await usersService.createUser(
-                authId, 
+                authId,
                 { 
                     email: responseBody.email,
                     username: responseBody.username,
@@ -38,7 +38,6 @@ module.exports = {
         try{
             const authId = req.authId;
             const user = await usersService.findUserByAuthId(authId);
-            console.log("user:" + user);
 
             return res.status(200).send(user);
         }
