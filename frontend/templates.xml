@@ -44,15 +44,66 @@
 
 
   </script></body>
-<body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button>NEXT QUESTION</button></footer><script>function resizeTextArea() {
+<body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button  id="question-footer-button">NEXT QUESTION</button></footer><script>function resizeTextArea() {
       textarea = document.getElementById("question-input");
       textarea.style.height = "";
       textarea.style.height = textarea.scrollHeight + 2 + "px";
     }
-    console.log("Loaded!");
-
+    async function getQuestions() {
+      if (window.questions === undefined || window.questions === null) {
+        // Should be global for moving back
+        window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions").then((response)=&gt;{response.json()});
+        window.currQuestionIdx = 0;
+      }
+      renderCurrentQuestion();
+    }
+    async function updateToNextQuestion(e) {
+      e.preventDefault();
+      let answer = textarea.value;
+      if (answer === "" || answer === undefined) return;
+      await postAnswer(answer);
+      window.answer = answer;
+      updateQuestion();
+    }
+    function updateQuestion(answer) {
+      if (window.currQuestionIdx  &lt; window.questions.length) {
+        currQuestionIdx += 1;
+        renderCurrentQuestion();
+      } else {
+        window.location.href = "#dating-screen";
+      }
+    }
+    function renderCurrentQuestion() {
+      questionId.textContent = window.currQuestionIdx + 1;
+      questionLabel.textContent = window.questions[window.currQuestionIdx].question;
+      textarea.value = "";
+    }
+    async function postAnswer(answer) {
+      await fetch("https://jsonplaceholder.typicode.com/todos", {
+        method: "POST",
+        body: JSON.stringify({
+          question_id: window.questions[window.currQuestionIdx],
+          answer: answer
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(() =&gt; {wondow.answer = answer});
+    }
     textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
     window.addEventListener("resize", resizeTextArea);
+    
+    questionId = document.getElementById("question-id");
+    
+    form = document.getElementById("question-form");
+    form.addEventListener("submit", updateToNextQuestion);
+    
+    nextButton = document.getElementById("question-footer-button");
+    nextButton.addEventListener("click", updateToNextQuestion)
+
+    questionLabel = document.getElementById("question-label");
+    getQuestions()
+
   </script></body>
 </templates>
