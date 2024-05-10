@@ -4,37 +4,156 @@
   </header>
   <main id="dating-page" class="flex-container flex-column">
     <span id="dating-question" class="question-box">
-        Were you breastfed as a child?
+        Why did my HTML not load correctly?
+    </span>
+    <span id="answer-bubble" class="question-box">
+      Hello :)
     </span>
     <div id="spider-container">
-      <!-- TODO: Place Spiders *randomly* -->
-      <button id="spider-1" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-2" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-2" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-3" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-3" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-4" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-4" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-5" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-5" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-6" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-6" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-7" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-7" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
-      <button id="spider-8" class="spider-button">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png"/>
+      <button id="spider-8" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
+        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
       </button>
     </div>
   </main>
-  
+
+  <script>
+    let questions = [
+          {
+              "question_id": 1,
+              "question": "Were you breastfed as a child?"
+          },
+          {
+              "question_id": 2,
+              "question": "What type of bear is best?"
+          },
+          {
+              "question_id": 3,
+              "question": "Describe your perfect avocado?"
+          },
+          {
+              "question_id": 4,
+              "question": "What is your opinion on the following statement: Butter is food lotion"
+          },
+          {
+              "question_id": 5,
+              "question": "How did Bruno Mars know her eyes were open, unless his were too?"
+          },
+          {
+              "question_id": 6,
+              "question": "Do you agree with the following statement: Male spiders can be romantic"
+          },
+          {
+              "question_id": 7,
+              "question": "If you were stuck on a deserted island, and you could only write one Javascript program to keep you busy, how would you kill yourself?"
+          },
+          {
+              "question_id": 8,
+              "question": "Would you rather be stuck on an island with a male spider or a bear spider?"
+          }
+      ];
+    let userAnswers;
+    let questionNumber = 0;
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Authorization': ''
+      }
+    };
+
+    function EatBug(clickedId) {
+      if(questionNumber === 7){
+        const buttonNumber = clickedId.split("-")[1];
+        
+        var answerElement = document.getElementById("answer-bubble");
+        // This should display on the ending screen
+        // answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
+        answerElement.textContent = "You found: test@user.com";
+      }
+
+      var element = document.getElementById(clickedId);
+      console.log("You clicked on", clickedId);
+      element.style.setProperty("display", "none");
+
+      questionNumber += 1;
+    }
+
+    function SetSpiderAnswer(spiderId){
+      const buttonNumber = spiderId.split("-")[1];
+      let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
+      var answerElement = document.getElementById("answer-bubble");
+      answerElement.textContent = spidersAnswer;
+    }
+
+    function HideAnswer(){
+      var answerElement = document.getElementById("answer-bubble");
+      answerElement.textContent = "";
+    }
+
+    function GetQuestions(){
+      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions', requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response);
+        }
+
+        return response.json();
+      })
+      .then(responseBody => {
+        questions = responseBody;
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+    }
+
+    function GetUserAnswers(){
+      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/random', requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response);
+        }
+
+        return response.json();
+      })
+      .then(responseBody => {
+        userAnswers = responseBody;
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+    }
+
+    function initialize(){
+      // Load the first question
+      questionDisplay = document.getElementById("dating-question");
+      questionDisplay.textContent = questions[questionNumber].question;
+    }
+
+    initialize();
+  </script>
+
   <footer> 
     <button>BACK TO HOME</button>
   </footer>
