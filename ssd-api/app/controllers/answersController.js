@@ -64,11 +64,9 @@ module.exports = {
     findAllUsersAnswers: async (req, res) => {
         try {
             const authId = req.authId;
-            console.log("authId" + authId);
 
             const user = await usersService.findUserByAuthId(authId);
             const userQuestions = await userQuestionService.findAllUserQuestions(user);
-            console.log("userQuestions" + userQuestions);
 
             const answers = [];
 

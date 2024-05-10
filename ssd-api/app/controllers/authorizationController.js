@@ -6,10 +6,15 @@ async function auth(req, res) {
   
   console.log(authorization)
   if (!authorization) {
-    return res.status(401).send({ message: 'no token' });
+    return res.status(401).send({ message: 'code' });
+  }
+  const code = authorization.split(' ')[1];
+  const access_token = await middleware.exchangeCodeForAccessToken(code);
+  if(!access_token)
+  {
+    return res.status(401).send({ message: 'no access token' });
   }
 
-  const access_token = authorization.split(' ')[1];
   const userData = await middleware.getGitHubUserData(access_token);
   const authId = userData.userId;
   const userEmail = userData.userEmail;
@@ -26,7 +31,6 @@ async function auth(req, res) {
           age: null
       });
     }
-
   res.send(middleware.createJWT({
     access_token: access_token,
     authId: authId,

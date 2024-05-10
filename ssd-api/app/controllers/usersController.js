@@ -38,7 +38,6 @@ module.exports = {
         try{
             const authId = req.authId;
             const user = await usersService.findUserByAuthId(authId);
-            console.log("user:" + user);
 
             return res.status(200).send(user);
         }
