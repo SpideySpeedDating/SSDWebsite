@@ -8,19 +8,13 @@
 
     const client_id = "your-client-id";
     const client_secret = "your-client-secret";
-    const redirect_uri = "http://localhost:3000/#login";
 
     const githubRequestOptions = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
+        headers: JSON.stringify({
             client_id,
             client_secret,
-            code,
-            redirect_uri
+            code
         })
     };
 
