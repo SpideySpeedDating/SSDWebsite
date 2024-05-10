@@ -1,5 +1,5 @@
-import { TesseraTextNode } from "./tree-objects";
-import { Utils } from "./uitls";
+import { TesseraTextNode } from "./tree-objects.js";
+import { Utils } from "./uitls.js";
 class LangBuilder {
     prependTags(data) {
         if (Utils.isNullOrUndefined(this.fileTagsMap[data.file]))

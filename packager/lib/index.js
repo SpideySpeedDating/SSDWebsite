@@ -1,4 +1,4 @@
-import { DomBuilder } from "./parser/dom-builder";
+import { DomBuilder } from "./parser/dom-builder.js";
 import path from "path";
 import fs from "fs";
 class App {

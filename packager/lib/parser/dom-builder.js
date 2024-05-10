@@ -1,7 +1,7 @@
-import { Attributes, TesseraTagNode, TesseraTextNode, ParserAttributeError } from "./tree-objects";
-import { ParserError } from "./errors";
-import { Utils } from "./uitls";
-import { CssBuilder } from "./css-js-file-builder";
+import { Attributes, TesseraTagNode, TesseraTextNode, ParserAttributeError } from "./tree-objects.js";
+import { ParserError } from "./errors.js";
+import { Utils } from "./uitls.js";
+import { CssBuilder } from "./css-js-file-builder.js";
 class DomBuilder {
     htmlString;
     tree;

@@ -1,5 +1,5 @@
-import { ParserError } from "./errors";
-import { Utils } from "./uitls";
+import { ParserError } from "./errors.js";
+import { Utils } from "./uitls.js";
 class TesseraNodeBase {
 }
 class TesseraTextNode extends TesseraNodeBase {
