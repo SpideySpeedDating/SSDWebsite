@@ -16,7 +16,12 @@
     async function getQuestions() {
       if (window.questions === undefined || window.questions === null) {
         // Should be global for moving back
-        window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions").then((response)=&gt;{response.json()});
+        window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions", {
+          method: "GET",
+          headers: {
+            "Authorization": localStorage.getItem("jwt")
+          }
+        }).then((response)=&gt;{response.json()});
         window.currQuestionIdx = 0;
       }
       renderCurrentQuestion();
@@ -50,7 +55,8 @@
           answer: answer
         }),
         headers: {
-          "Content-type": "application/json; charset=UTF-8"
+          "Content-type": "application/json; charset=UTF-8",
+          "Authorization": localStorage.getItem("jwt")
         }
       }).then(() =&gt; {wondow.answer = answer});
     }
