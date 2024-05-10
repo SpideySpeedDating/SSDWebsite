@@ -50,7 +50,7 @@
       textarea.value = "";
     }
     async function postAnswer(answer) {
-      await fetch("https://jsonplaceholder.typicode.com/todos", {
+      await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/create", {
         method: "POST",
         body: JSON.stringify({
           question_id: window.questions[window.currQuestionIdx],
