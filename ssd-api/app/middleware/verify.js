@@ -83,9 +83,47 @@ async function getGitHubUserData(accessToken) {
 
     return jwttoken;
   }
- 
+
+async function exchangeCodeForAccessToken(code) {
+  const clientId = process.env.CLIENT_ID;
+  const clientSecret = process.env.CLIENT_SECRET;
+
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'github.com',
+      path: `/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${code}`,
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json'
+      }
+    };
+    
+    const req = https.request(options, (response) => {
+      let data = '';
+  
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      response.on('end', () => {
+        const responseData = JSON.parse(data);
+        const accessToken = responseData.access_token;
+        resolve(accessToken);
+      });
+    });
+  
+    req.on('error', (error) => {
+      console.error(error);
+      res.status(500).send('Failed to retrieve access token');
+    });
+  
+    req.end();
+  });
+}
+
   module.exports = {
     ensureAuthenticated,
     createJWT,
-    getGitHubUserData
+    getGitHubUserData,
+    exchangeCodeForAccessToken
   };
