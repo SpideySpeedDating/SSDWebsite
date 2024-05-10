@@ -177,14 +177,9 @@
     console.log("fetching");
     fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/auth", authOptions)
         .then(response =&gt; {
-            console.log(response);
-            response.json().then((data) =&gt; {
-                localStorage.setItem("jwt", data["accessToken"]);
-                window.location.search = "";
-                window.location.hash = "";
-            }).catch(() =&gt; {
-                console.log("Couldn't parse the JSON");
-            });
+            localStorage.setItem("jwt", response.body);
+            window.location.search = "";
+            window.location.hash = "";
         })
         .catch(error =&gt; console.error("Error fetching API:", error));
 
