@@ -106,9 +106,10 @@ class Router {
         }
         this.#mountedScripts = []
     }
-    static loginRedirect(to){
+    static loginRedirect(to, indexMessage=null) {
         localStorage.setItem("loginRedirect", to);
-        window.location.hash = "";
+        if (!Utils.isNullOrUndefined(indexMessage)) localStorage.setItem(Utils.indexMessage, indexMessage);
+        window.location.hash = "#";
     }
     async start() {
         window.addEventListener("hashchange", this.uriHandlerClosure);

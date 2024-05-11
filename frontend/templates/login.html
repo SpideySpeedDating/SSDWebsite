@@ -42,7 +42,8 @@
     
     if (!Utils.isNullOrUndefined(localStorage.getItem(Utils.loginRedirect))) {
         let htmlId = localStorage.getItem(Utils.loginRedirect);
-        localStorage.setItem(Utils.loginRedirect, "");
+        localStorage.removeItem(Utils.loginRedirect);
+        localStorage.removeItem(Utils.indexMessage);
         window.location.hash = htmlId;
     }
     let backToHome = document.getElementById("back-to-home");
