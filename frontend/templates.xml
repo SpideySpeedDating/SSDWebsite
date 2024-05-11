@@ -50,8 +50,7 @@
 
     function HideAnswer(){
       var answerElement = document.getElementById("answer-bubble");
-
-      answerElement.textContent = "";
+      answerElement.textContent = "Hello :)";
     }
 
     async function GetUserAnswers(){
