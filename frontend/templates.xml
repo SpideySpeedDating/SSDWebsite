@@ -189,7 +189,7 @@
     }
   </script></body>
 <body id="info"><header><h2>Welcome to our dating platform!</h2></header><main  id="info-page" class="flex-container flex-column flex-center-column"><p>Here's a quick guide on how everything works:</p><ol><li>Create Your Profile: First things first, set up your profile! Tell us about yourself, and answer some fun questions. Once you're done, hit that "Create Profile" button.</li><li>Get Ready to Date: Once your profile is set, you're ready to dive into the dating world! Click on the "Start Dating" button to begin.</li><li>Meet the "Insects": In the dating game, you'll find yourself in a web with other users represented as insects. Don't worry, it's all in good fun! Each "round" will present a question, and you'll see the answers from the other users.</li><li>Navigate the Web: The spider, that's you, will eliminate one insect at a time based on their answers. It's kind of like a game of elimination! 🕷️ Bye-bye bugs!</li><li>Find Your Match: As the rounds progress, users will be eliminated until there's only one left standing. The spider, that's still you, will then get the remaining user's info, like email address.</li></ol><p>And that's it! It's a fun way to meet new people and see who you vibe with. So go ahead, give it a try and see who you catch in your web! 🕸️</p></main><footer><a  href="#"><button>BACK TO HOME</button></a></footer></body>
-<body id="intro-questions"><header><h2>Tell us about yourself!</h2></header><main  id="intro-questions"><form  id="intro-questions-form"><span  id="users-name-box"><label  for="users-name">What's your name?</label><input  id="users-name"/></span><span  id="users-age-box"><label  for="users-age">How old are you?</label><input  id="users-age" type="number"/></span><span  id="users-gender-box"><label  for="users-gender">How do you identify your gender?</label><input  id="users-gender"/></span><span  id="users-orientation-box"><label  for="users-orientation">What's your sexual orientation?</label><input  id="users-orientation"/></span><button  type="submit">Submit</button></form></main><footer><a  href="#"><button>Back to Home</button></a></footer><script>function submitForm(e) {
+<body id="intro-questions"><header><h2>Tell us about yourself!</h2></header><main  id="intro-questions"><form  id="intro-questions-form"><span  id="users-name-box"><label  for="users-name">What's your name?</label><input  id="users-name"/></span><span  id="users-age-box"><label  for="users-age">How old are you?</label><input  id="users-age" type="number"/></span><span  id="users-gender-box"><label  for="users-gender">How do you identify your gender?</label><select  id="users-gender"><option  value="male">Male</option><option  value="female">Female</option><option  value="other">Other</option></select></span><span  id="users-orientation-box"><label  for="users-orientation">What's your sexual orientation?</label><select  id="users-orientation"><option  value="straight">Straight</option><option  value="gay">Gay</option><option  value="other">Other</option></select></span><button  type="submit">Submit</button></form></main><footer><a  href="#"><button>Back to Home</button></a></footer><script>function submitForm(e) {
 
       usersName = document.getElementById("users-name").value;
       usersAge = document.getElementById("users-age").value;
@@ -205,7 +205,8 @@
             "age": usersAge
         }
       }
-      window.location.href = "#dating-info";
+      console.log(options);
+      // window.location.href = "#dating-info";
     }
     
     form = document.getElementById("intro-questions-form");

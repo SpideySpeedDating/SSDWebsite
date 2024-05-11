@@ -192,7 +192,8 @@ footer {
 
 /* --- input --- */
 input,
-textarea {
+textarea,
+select {
   border: 1px solid white;
   background-color: var(--secondary-bg-color);
   color: black;
@@ -201,7 +202,8 @@ textarea {
 }
 
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   border: 1px solid white;
   outline: 0;
 }
@@ -432,6 +434,7 @@ header:has(+ #info-page) h2::before {
   flex-grow: 1;
 }
 
-#intro-questions input {
+#intro-questions input,
+#intro-questions select {
   width: 90%;
 }
