@@ -14,6 +14,7 @@
     let questionNumberDisplay = document.getElementById("round-id");
     let questionNumber = 0;
     let eatenUsers = 0;
+    let container = document.getElementById("spider-container");
     console.log(questions)
 
     const requestOptions = {
@@ -29,7 +30,6 @@
         
         var answerElement = document.getElementById("answer-bubble");
         answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
-        //Go to congrats page
       }
 
       var element = document.getElementById(clickedId);
@@ -66,6 +66,12 @@
           answers: [
             "user 2 answer", "user 2 answer but question 2"
           ]
+        },
+        {
+          email: "user3@emil.com",
+          answers: [
+            "user 3 answer", "user 3 answer but question 2"
+          ]
         }
       ]
       // fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
@@ -94,8 +100,6 @@
       // Load users with their answers
       await GetUserAnswers();
       if (!Utils.isNullOrUndefined(userAnswers) &amp;&amp; userAnswers.length &gt; 0) {
-        let template = document.getElementById("spider-button-template-parent");
-        let container = document.getElementById("spider-container");
         let removeChildren = true;
         for(let idx=0; idx &lt; userAnswers.length; idx++) {
           if (removeChildren) {
@@ -106,6 +110,12 @@
         }
       }
       // Foreach answer insert template
+    }
+    function getIdOfVisibleSiper() {
+      for(let child of container.children) {
+        if (child.style.display != "none") return child.id;
+      }
+      return undefined;
     }
 
     function createSpiderButton(idx) {
