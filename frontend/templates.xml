@@ -181,7 +181,6 @@
     }
   </script><script  type="module">import { Utils } from "/lib/utils.js";
     let indexMessage = localStorage.getItem(Utils.indexMessage);
-    console.log(indexMessage);
     if (indexMessage != null) {
       let messageElement = document.getElementById("index-message");
       messageElement.style.display = "block";
@@ -250,10 +249,7 @@
                       localStorage.removeItem(Utils.indexMessage);
                       hashLocation = htmlId;
                     }
-                    console.log("#" + hashLocation);
-                    window.history.pushState(null, '', "#" + hashLocation);
-                    window.location.search = "";
-                    console.log(window.location.search);
+                    window.location.href = "#" + hashLocation;
                 })
             }
         })
