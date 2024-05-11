@@ -14,29 +14,22 @@
     <a href="#"><button>BACK TO HOME</button></a>
     <button id="question-footer-button">NEXT QUESTION</button> 
   </footer>
-  <script>
-    let questions = [];
-    let currQuestionIdx = 0;
-
+  <script type="module">
+    import {Utils} from "./lib/utils.js"
     function resizeTextArea() {
-      textarea = document.getElementById("question-input");
+      let textarea = document.getElementById("question-input");
       textarea.style.height = "";
       textarea.style.height = textarea.scrollHeight + 2 + "px";
     }
     async function getQuestions() {
-      if (questions === undefined || questions === null) {
-        // Should be global for moving back
-        questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions", {
+      if (window.questions === undefined || window.questions === null) {
+        window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
           method: "GET",
           headers: {
             "Authorization": localStorage.getItem("jwt")
           }
-        }).then((response) => {
-          response.json((data) => {
-            questions = data;
-          })
-        });
-        currQuestionIdx = 0;
+        }).then((response) => {return response.json()})
+        window.currQuestionIdx = 0;
       }
       renderCurrentQuestion();
     }
@@ -56,36 +49,36 @@
       }
     }
     function renderCurrentQuestion() {
+      let questionLabel = document.getElementById("question-label");
+      questionLabel.textContent = window.questions[window.currQuestionIdx].question;
       questionId.textContent = currQuestionIdx + 1;
-      questionLabel.textContent = questions[currQuestionIdx].question;
       textarea.value = "";
     }
     async function postAnswer(answer) {
-      await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/create", {
+      await fetch(`${Utils.apiURL()}/api/answers/create`, {
         method: "POST",
         body: JSON.stringify({
-          question_id: questions[currQuestionIdx],
+          question_id: questions[window.currQuestionIdx].question_id,
           answer: answer
-        }),
+      }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": localStorage.getItem("jwt")
         }
       }).then(() => { console.log("Sent answer successfully"); });
     }
-    textarea = document.getElementById("question-input");
+    let textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
     window.addEventListener("resize", resizeTextArea);
     
-    questionId = document.getElementById("question-id");
+    let questionId = document.getElementById("question-id");
     
-    form = document.getElementById("question-form");
+    let form = document.getElementById("question-form");
     form.addEventListener("submit", updateToNextQuestion);
     
-    nextButton = document.getElementById("question-footer-button");
+    let nextButton = document.getElementById("question-footer-button");
     nextButton.addEventListener("click", updateToNextQuestion)
-
-    questionLabel = document.getElementById("question-label");
+    
     getQuestions()
 
   </script>
