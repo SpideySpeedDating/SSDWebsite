@@ -88,4 +88,15 @@
       window.location.search = "";
     }
   </script>
+
+  <script type="module">
+    import { Utils } from "/lib/utils.js";
+    let indexMessage = localStorage.getItem(Utils.indexMessage);
+    if (indexMessage != null) {
+      let messageElement = document.getElementById("index-message");
+      messageElement.style.display = "block";
+      messageElement.textContent = indexMessage;
+      localStorage.removeItem(Utils.indexMessage);
+    }
+  </script>
 </body>
