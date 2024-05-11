@@ -19,9 +19,13 @@
     import {DataService} from "./lib/data-service.js";
     import {Utils} from "./lib/utils.js";
     
+
     let questions = window.questions || await DataService.getQuestions()
     let userAnswers;
+    let questionDisplay = document.getElementById("dating-question");
+    let questionNumberDisplay = document.getElementById("round-id");
     let questionNumber = 0;
+    let eatenUsers = 0;
     console.log(questions)
 
     const requestOptions = {
@@ -32,18 +36,20 @@
     };
 
     function EatBug(clickedId) {
-      if(questionNumber === 7){
+      if(questionNumber === 7 || (userAnswers.length - eatenUsers < 2)){
         const buttonNumber = clickedId.split("-")[1];
         
         var answerElement = document.getElementById("answer-bubble");
         answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
+        //Go to congrats page
       }
 
       var element = document.getElementById(clickedId);
       console.log("You clicked on", clickedId);
       element.style.setProperty("display", "none");
-
+      eatenUsers += 1;
       questionNumber += 1;
+      updateQuestion();
     }
 
     function SetSpiderAnswer(spiderId){
@@ -60,12 +66,20 @@
     }
 
     async function GetUserAnswers(){
-      userAnswers = {
-        email: "user@emil.com",
-        answers: [
-          "Answer", "Answer but 2"
-        ]
-      }
+      userAnswers = [
+        {
+          email: "user1@emil.com",
+          answers: [
+            "user 1 answer", "user 1 answer but question 2"
+          ]
+        },
+        {
+          email: "user2@emil.com",
+          answers: [
+            "user 2 answer", "user 2 answer but question 2"
+          ]
+        }
+      ]
       // fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
       // .then(response => {
       //   if (!response.ok) {
@@ -82,18 +96,20 @@
       // });
     }
 
-    async function initialize(){
-      // Load the first question
-      let questionDisplay = document.getElementById("dating-question");
+    function updateQuestion(){
       questionDisplay.textContent = questions[questionNumber].question;
-      // Load answers
+      questionNumberDisplay = questionNumber + 1;
+    }
+    async function initialize(){
+
+      updateQuestion();
+      // Load users with their answers
       await GetUserAnswers();
-      console.log()
-      if (!Utils.isNullOrUndefined(userAnswers) && userAnswers["answers"].length > 0) {
+      if (!Utils.isNullOrUndefined(userAnswers) && userAnswers.length > 0) {
         let template = document.getElementById("spider-button-template-parent");
         let container = document.getElementById("spider-container");
         let removeChildren = true;
-        for(let idx=0; idx < userAnswers["answers"].length; idx++) {
+        for(let idx=0; idx < userAnswers.length; idx++) {
           if (removeChildren) {
             Utils.removeElementIdChildren(container);
             removeChildren = false;
