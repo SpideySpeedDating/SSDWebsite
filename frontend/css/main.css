@@ -128,9 +128,9 @@ main.flex-container {
   width: calc(90vw - 1rem);
 }
 
-/* --- nav --- */
+/* --- home page nav --- */
 
-nav {
+#home-page-nav {
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -140,16 +140,22 @@ nav {
   padding: 1rem;
 }
 
-nav .links {
+#home-page-nav .links {
   padding: 3ch;
 }
 
-nav .links a {
+#home-page-nav .links a {
   text-decoration: none;
 }
 
-nav .links a:visited {
+#home-page-nav .links a:visited {
   color: var(--secondary-color);
+}
+
+#main-page-logged-in-links {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 /* --- header --- */
@@ -168,6 +174,11 @@ header > h5 {
 }
 
 /* --- footer --- */
+
+#app-container main + footer:last-child {
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
 
 footer {
   display: flex;

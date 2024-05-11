@@ -1,19 +1,22 @@
 <body>
   <div class="flex-container flex-column flex-justify-space-between">
-    <nav>
+    <nav id="home-page-nav">
       <img id="logo" src="img/logo.png" width="115" height="102" />
       <div class="links">
         <a href="#" id="github-login"><button>Login with GitHub</button></a>
         <a href="#" id="logout" style="display: none;"><button>Logout</button></a>
       </div>
     </nav>
-    <main id="home-page">
+    <main id="home-page" class="flex-container flex-column flex-justify-space-between">
       <h1>Welcome to Spidey Spee<span class="hanging-spider">d</span>Dating!</h1>
       <span id="index-message" style="display: none;"></span>
     </main>
     <footer>
       <a href="#info">Not sure how it works? Click here!</a>
-      <a id="next-page"href="#intro-questions" style="display: none;"><button>next page</button></a>
+      <nav id="main-page-logged-in-links" style="display: none;" class="flex-container">
+        <a href="#intro-questions"><button>User Questions</button></a>
+        <a href="#question"><button>Dating Questions</button></a>
+      </nav>
     </footer>
   </div>
 
@@ -59,8 +62,8 @@
         if (response.ok) {
           let github_login = document.getElementById("github-login");
           github_login.style.display = "none";
-          let next_page = document.getElementById("next-page");
-          next_page.style.display = "block";
+          let main_page_logged_in_links = document.getElementById("main-page-logged-in-links");
+          main_page_logged_in_links.style.display = "flex";
           let logout = document.getElementById("logout");
           logout.style.display = "block";
         }
@@ -72,10 +75,10 @@
     function logoutUser() {
       localStorage.removeItem("jwt");
       let github_login = document.getElementById("github-login");
-      let next_page = document.getElementById("next-page");
+      let main_page_logged_in_links = document.getElementById("main-page-logged-in-links");
       github_login.style.display = "block";
       logout.style.display = "none";
-      next_page.style.display = "none";
+      main_page_logged_in_links.style.display = "none";
     }
 
     let logout = document.getElementById("logout");

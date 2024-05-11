@@ -110,6 +110,7 @@ class Router {
     }
     static loginRedirect(to, indexMessage=null) {
         localStorage.setItem("loginRedirect", to);
+        localStorage.removeItem("jwt");
         if (!Utils.isNullOrUndefined(indexMessage)) {
             localStorage.setItem(Utils.indexMessage, indexMessage);
         } else {
