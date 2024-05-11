@@ -404,7 +404,6 @@ header:has(+ #info-page) h2::before {
 #intro-questions #intro-questions-form {
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
   gap: 2rem;
   justify-content: center;
   padding: 2rem;

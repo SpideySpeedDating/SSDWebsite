@@ -14,21 +14,21 @@ module.exports = {
     updateUser: async (req, res) => {
         try {
             const authId = req.authId;
-            const responseBody = req.body;
-            if (!responseBody) {
+            const requestBody = req.body;
+            if (!requestBody) {
                 return res.status(400).send({ message: "Bad Request, no user data" });
             }
-            const userEmail = responseBody.email || "Email not available";
+            const userEmail = requestBody.email || "Email not available";
             const gender =  (requestBody.gender || "").toLowerCase();
             const sexuality =  (requestBody.sexuality || "").toLowerCase();
             await usersService.updateUser(
                 authId,
                 {
                     email: userEmail,
-                    username: responseBody.username,
+                    username: requestBody.username,
                     gender: gender,
                     sexuality: sexuality,
-                    age: responseBody.age
+                    age: requestBody.age
                 });
 
             return res.status(200).send({ message: "Success" });

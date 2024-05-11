@@ -2,7 +2,7 @@
   <header>
     <h2>Tell us about yourself!</h2>
   </header>
-  <main id="intro-questions">
+  <main id="intro-questions" class="flex-container flex-column flex-center-column">
     <form id="intro-questions-form">
       <span id="users-name-box">
         <label for="users-name">What's your name?</label>
@@ -38,27 +38,52 @@
   <footer>
     <a href="#"><button>Back to Home</button></a>
   </footer>
-  <script>
+  <script type="module">
+    import { Utils } from "/lib/utils.js";
+
     function submitForm(e) {
 
-      usersName = document.getElementById("users-name").value;
-      usersAge = document.getElementById("users-age").value;
-      usersGender = document.getElementById("users-gender").value;
-      usersOrientation = document.getElementById("users-orientation").value;
+      let usersName = document.getElementById("users-name").value;
+      let usersAge = document.getElementById("users-age").value;
+      let usersGender = document.getElementById("users-gender").value;
+      let usersOrientation = document.getElementById("users-orientation").value;
 
       let options = {
-        method: "POST",
-        body: {
+        method: "PUT",
+        body: JSON.stringify({
             "username": usersName,
             "gender": usersGender,
             "sexuality": usersOrientation,
             "age": usersAge
+        }),
+        headers: {
+          Authorization: localStorage.getItem("jwt")
         }
       }
-      window.location.href = "#dating-info";
+      fetch(Utils.apiURL() + "/api/users/update", options).then((res) => {
+        if (res.ok) {
+          displayMessage("Success! On to the next page you go!");
+          window.location.href = "#dating-info";
+        } else {
+          displayMessage("Failed! Here's what we know: (intentionally left blank)");
+        }
+      }).catch((err) => {
+        displayMessage("Big boy error!\n" + err);
+      });
+    }
+
+    function displayMessage(msg) {
+      let messageElement = document.getElementById("message");
+      if (messageElement == null) {
+        const mainBody = document.getElementById("intro-questions");
+        messageElement = document.createElement("p");
+        messageElement.id = "message";
+        mainBody.prepend(messageElement);
+      }
+      messageElement.textContent = msg;
     }
     
-    form = document.getElementById("intro-questions-form");
+    let form = document.getElementById("intro-questions-form");
     form.addEventListener('submit', submitForm);
   </script>
 </body>
