@@ -15,25 +15,28 @@
     <button id="question-footer-button">NEXT QUESTION</button> 
   </footer>
   <script>
+    let questions = [];
+    let currQuestionIdx = 0;
+
     function resizeTextArea() {
       textarea = document.getElementById("question-input");
       textarea.style.height = "";
       textarea.style.height = textarea.scrollHeight + 2 + "px";
     }
     async function getQuestions() {
-      if (window.questions === undefined || window.questions === null) {
+      if (questions === undefined || questions === null) {
         // Should be global for moving back
-        window.questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions", {
+        questions = await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions", {
           method: "GET",
           headers: {
             "Authorization": localStorage.getItem("jwt")
           }
         }).then((response) => {
           response.json((data) => {
-            window.questions = data;
+            questions = data;
           })
         });
-        window.currQuestionIdx = 0;
+        currQuestionIdx = 0;
       }
       renderCurrentQuestion();
     }
@@ -42,11 +45,10 @@
       let answer = textarea.value;
       if (answer === "" || answer === undefined) return;
       await postAnswer(answer);
-      window.answer = answer;
       updateQuestion();
     }
-    function updateQuestion(answer) {
-      if (window.currQuestionIdx < window.questions.length) {
+    function updateQuestion() {
+      if (currQuestionIdx < questions.length) {
         currQuestionIdx += 1;
         renderCurrentQuestion();
       } else {
@@ -54,22 +56,22 @@
       }
     }
     function renderCurrentQuestion() {
-      questionId.textContent = window.currQuestionIdx + 1;
-      questionLabel.textContent = window.questions[window.currQuestionIdx].question;
+      questionId.textContent = currQuestionIdx + 1;
+      questionLabel.textContent = questions[currQuestionIdx].question;
       textarea.value = "";
     }
     async function postAnswer(answer) {
       await fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/create", {
         method: "POST",
         body: JSON.stringify({
-          question_id: window.questions[window.currQuestionIdx],
+          question_id: questions[currQuestionIdx],
           answer: answer
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": localStorage.getItem("jwt")
         }
-      }).then(() => {window.answer = answer});
+      }).then(() => { console.log("Sent answer successfully"); });
     }
     textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
