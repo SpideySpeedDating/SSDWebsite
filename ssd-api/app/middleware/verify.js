@@ -88,6 +88,7 @@ async function exchangeCodeForAccessToken(code) {
         "Accept": "application/json"
       }
     };
+    console.log(options);
 
     const req = https.request(options, (response) => {
       let data = "";

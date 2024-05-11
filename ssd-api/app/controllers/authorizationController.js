@@ -39,11 +39,10 @@ async function authenticateUser(req, res) {
     email: userEmail
   });
 
-  res.set("Authorization", JWT);
-  res.status(200).json({ message: "Authentication successful" });
+  res.status(200).json({ message: "Authentication successful", "jwt": JWT });
 }
 
-function validateLogin() {
+function validateLogin(req, res) {
   const JWT = req.headers.authorization;
   if (!JWT) {
     return res.status(400).send({ message: "Bad Request" });
@@ -56,7 +55,12 @@ function validateLogin() {
   });
 }
 
+function generateLink(_, res) {
+  return res.status(200).send({url: `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`})
+}
+
 module.exports = {
   authenticateUser,
-  validateLogin
+  validateLogin,
+  generateLink
 };

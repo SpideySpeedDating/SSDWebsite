@@ -119,17 +119,64 @@
     initialize();
   </script><footer><button>BACK TO HOME</button></footer></body>
 <body id="default-404"><h1>Default-404! (whoopsie daisy🕸️)</h1></body>
-<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#login" id="github-login">Login with GitHub</a></div></nav><main  id="home-page"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1></main><footer><a  href="#info">Not sure how it works? Click here!</a><a  href="#intro-questions"><button>next page</button></a></footer></div><script>function navigateToGithubLogin(event) {
+<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#" id="github-login"><button>Login with GitHub</button></a><a  href="#" id="logout" style="display: none;"><button>Logout</button></a></div></nav><main  id="home-page"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1><span  id="index-message" style="display: none;"></span></main><footer><a  href="#info">Not sure how it works? Click here!</a><a  id="next-page" href="#intro-questions" style="display: none;"><button>next page</button></a></footer></div><script  type="module">import {Utils} from "/lib/utils.js";
+
+    async function navigateToGithubLogin(event) {
       event.preventDefault();
-      console.log("hi");
-      window.location.href = `https://github.com/login/oauth/authorize?client_id=Ov23li96pnWfFYn2p8gE`;
+      console.log();
+      let messageElement = document.getElementById("index-message");
+      fetch(Utils.apiURL() + "/auth/generate_link").then((response) =&gt; {
+        if (!response.ok) {
+          messageElement.style.display = "block";
+          messageElement.textContent = "Error from API! " + response.status + ": " + response.statusText;
+        } else {
+          response.json().then((data) =&gt; {
+            messageElement.style.display = "none";
+            window.location.href = data.url;
+          }).catch(() =&gt; {
+            messageElement.style.display = "block";
+            messageElement.textContent = "JSON response from server was bad!";
+          });
+        }
+      }).catch((err) =&gt; {
+        messageElement.style.display = "block";
+        messageElement.textContent = "Could not contact server!";
+      });
     }
 
     let github_login = document.getElementById("github-login");
-    console.log(github_login);
     github_login.addEventListener('click', navigateToGithubLogin);
+  </script><script  type="module">import {Utils} from "/lib/utils.js";
+    let jwt = localStorage.getItem("jwt")
+    if (jwt != null) {
+      let options = {
+        headers: {
+          "Authorization" : jwt
+        }
+      }
+      fetch(Utils.apiURL() + "/auth/verify", options).then((response) =&gt; {
+        if (response.ok) {
+          let github_login = document.getElementById("github-login");
+          github_login.style.display = "none";
+          let next_page = document.getElementById("next-page");
+          next_page.style.display = "block";
+          let logout = document.getElementById("logout");
+          logout.style.display = "block";
+        }
+      });
+    }
+  </script><script  type="module">function logoutUser() {
+      localStorage.removeItem("jwt");
+      let github_login = document.getElementById("github-login");
+      let next_page = document.getElementById("next-page");
+      github_login.style.display = "block";
+      logout.style.display = "none";
+      next_page.style.display = "none";
+    }
 
-    let searchParams = new URLSearchParams(window.location.search);
+    let logout = document.getElementById("logout");
+    logout.addEventListener('click', logoutUser);
+  </script><script  type="module">let searchParams = new URLSearchParams(window.location.search);
     if (searchParams.size != 0) {
       window.location.search = "";
     }
@@ -157,41 +204,43 @@
     form = document.getElementById("intro-questions-form");
     form.addEventListener('submit', submitForm);
   </script></body>
-<body id="login"><h1>Login Page!</h1><a  href="#"><button  id="back-to-home">Back to Home</button></a><script>console.log("loaded");
+<body id="login"><h1>Login Page!</h1><a  href="#"><button  id="back-to-home">Back to Home</button></a><script  type="module">import {Utils} from "/lib/utils.js";
+
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
-    options = {
+    let options = {
         headers: {
             "Access-Control-Allow-Origin": window.location.origin
         }
     }
 
-    fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/status", options)
+    fetch(Utils.apiURL() + "/api/status", options)
         .then(response =&gt; {
             console.log(response);
         })
         .catch(error =&gt; console.error("Error fetching API:", error));
         
-    authOptions = {
+    let authOptions = {
         headers: {
             "Access-Control-Allow-Origin": window.location.origin,
-            "Authorization" : "Bearer " + code
+            "Authorization" : code
         }
     }
 
-    console.log("fetching");
-    fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/auth", authOptions)
+    fetch(Utils.apiURL() + "/auth", authOptions)
         .then(response =&gt; {
-            response.text().then(token =&gt; {
-                localStorage.setItem("jwt", token);
-            }).catch(error =&gt; {
-                console.error("Error retrieving token:", error);
-            });
-            window.location.hash = "";
+            if (!response.ok) {
+                alert("Failed to login! Check your code?\n")
+            } else {
+                response.json().then((data) =&gt; {
+                    console.log(data);
+                    localStorage.setItem("jwt", data["jwt"]);
+                })
+            }
         })
         .catch(error =&gt; console.error("Error fetching API:", error));
 
-    backToHome = document.getElementById("back-to-home");
+    let backToHome = document.getElementById("back-to-home");
     backToHome.addEventListener('click', () =&gt; {
         window.location.hash = "";
     })

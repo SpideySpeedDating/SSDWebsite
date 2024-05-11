@@ -1,4 +1,4 @@
-const pool = require("./servicesPool");
+const pool = require("./DBPool");
 
 module.exports = {
   findAllQuestions: async () => {

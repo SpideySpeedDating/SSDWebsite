@@ -46,7 +46,14 @@ class Router {
         this.unmountScripts();
         let templateBody = this.#templatesXml.getElementById(templateId);
         for (let child of templateBody.childNodes) {
-            if (child.tagName.toLowerCase() === "script") this.#scriptsToMount.push(child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"));
+            if (child.tagName.toLowerCase() === "script") {
+                this.#scriptsToMount.push(
+                    { 
+                        "content": child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"),
+                        "type": child.getAttribute("type")
+                    }
+                );
+            }
         }
 
         templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
@@ -67,7 +74,10 @@ class Router {
         for(let idx=0; idx < this.#scriptsToMount.length; idx++) {
             let script = document.createElement("script");
             script.id = `custom-script-${idx}`;
-            script.appendChild(document.createTextNode(this.#scriptsToMount[idx]));
+            if (this.#scriptsToMount[idx].type) {
+                script.setAttribute("type", this.#scriptsToMount[idx].type);
+            }
+            script.appendChild(document.createTextNode(this.#scriptsToMount[idx].content));
             this.#mountedScripts.push(script);
             document.body.appendChild(script);
         }

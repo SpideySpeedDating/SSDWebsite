@@ -4,7 +4,7 @@
 *.swp
 
 # API keys and secrets
-.env
+.env*
 
 # Dependency directory
 node_modules

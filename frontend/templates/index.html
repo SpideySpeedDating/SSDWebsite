@@ -3,28 +3,87 @@
     <nav>
       <img id="logo" src="img/logo.png" width="115" height="102" />
       <div class="links">
-        <a href="#login" id="github-login">Login with GitHub</a>
+        <a href="#" id="github-login"><button>Login with GitHub</button></a>
+        <a href="#" id="logout" style="display: none;"><button>Logout</button></a>
       </div>
     </nav>
     <main id="home-page">
       <h1>Welcome to Spidey Spee<span class="hanging-spider">d</span> Dating!</h1>
+      <span id="index-message" style="display: none;"></span>
     </main>
     <footer>
       <a href="#info">Not sure how it works? Click here!</a>
-      <a href="#intro-questions"><button>next page</button></a>
+      <a id="next-page"href="#intro-questions" style="display: none;"><button>next page</button></a>
     </footer>
   </div>
-  <script>
-    function navigateToGithubLogin(event) {
+
+  <script type="module">
+    import {Utils} from "/lib/utils.js";
+
+    async function navigateToGithubLogin(event) {
       event.preventDefault();
-      console.log("hi");
-      window.location.href = `https://github.com/login/oauth/authorize?client_id=Ov23li96pnWfFYn2p8gE`;
+      console.log();
+      let messageElement = document.getElementById("index-message");
+      fetch(Utils.apiURL() + "/auth/generate_link").then((response) => {
+        if (!response.ok) {
+          messageElement.style.display = "block";
+          messageElement.textContent = "Error from API! " + response.status + ": " + response.statusText;
+        } else {
+          response.json().then((data) => {
+            messageElement.style.display = "none";
+            window.location.href = data.url;
+          }).catch(() => {
+            messageElement.style.display = "block";
+            messageElement.textContent = "JSON response from server was bad!";
+          });
+        }
+      }).catch((err) => {
+        messageElement.style.display = "block";
+        messageElement.textContent = "Could not contact server!";
+      });
     }
 
     let github_login = document.getElementById("github-login");
-    console.log(github_login);
     github_login.addEventListener('click', navigateToGithubLogin);
+  </script>
 
+  <script type="module">
+    import {Utils} from "/lib/utils.js";
+    let jwt = localStorage.getItem("jwt")
+    if (jwt != null) {
+      let options = {
+        headers: {
+          "Authorization" : jwt
+        }
+      }
+      fetch(Utils.apiURL() + "/auth/verify", options).then((response) => {
+        if (response.ok) {
+          let github_login = document.getElementById("github-login");
+          github_login.style.display = "none";
+          let next_page = document.getElementById("next-page");
+          next_page.style.display = "block";
+          let logout = document.getElementById("logout");
+          logout.style.display = "block";
+        }
+      });
+    }
+  </script>
+
+  <script type="module">
+    function logoutUser() {
+      localStorage.removeItem("jwt");
+      let github_login = document.getElementById("github-login");
+      let next_page = document.getElementById("next-page");
+      github_login.style.display = "block";
+      logout.style.display = "none";
+      next_page.style.display = "none";
+    }
+
+    let logout = document.getElementById("logout");
+    logout.addEventListener('click', logoutUser);
+  </script>
+
+  <script type="module">
     let searchParams = new URLSearchParams(window.location.search);
     if (searchParams.size != 0) {
       window.location.search = "";
