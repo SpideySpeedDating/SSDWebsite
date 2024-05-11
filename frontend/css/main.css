@@ -1,0 +1,380 @@
+/* ----------- CSS RESET -------------- */
+/* https://www.joshwcomeau.com/css/custom-css-reset/ */
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  5. Improve media defaults
+*/
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  6. Remove built-in form typography styles
+*/
+input, button, textarea, select {
+  font: inherit;
+}
+/*
+  7. Avoid text overflows
+*/
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+/*
+  8. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
+}
+
+/* ------------------------- */
+
+/* --- Other Root changes --- */
+
+html, body {
+  height: 100%;
+}
+
+/* --- Variables --- */
+
+:root {
+  --main-bg-color: #D1AAC8;
+  --primary-color:  #77AE6F;
+  --text-1-color: #504DFF;
+  --text-2-color: #0090CD;
+  --text-3-color: #ED4C7F;
+  --text-4-color: #524944;
+}
+
+/* --- General Settings --- */
+
+body {
+  color: var(--text-4-color);
+  background-color: var(--main-bg-color);
+  font-family: "Solway", serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Calistoga", serif;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h1, h2 {
+  color: var(--text-1-color)
+}
+
+h3, h4, h5 {
+  color: var(--text-2-color)
+}
+
+a {
+  color: var(--text-4-color); 
+}
+
+.flex-container {
+  display: flex;
+  height: 100%;
+  align-content: space-around;
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+  width: 100%;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+
+.flex-justify-space-around {
+  justify-content: space-around;
+}
+
+/* Instead of putting justify-content on the app-container, this prevents the text from escaping out the top */
+.flex-center-column > :first-child {
+  margin-top: auto;
+}
+
+.flex-center-column > :last-child {
+  margin-bottom: auto;
+}
+
+main.flex-container {
+  width: calc(90vw - 1rem);
+}
+
+/* --- nav --- */
+
+nav {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  align-items: center;
+  justify-content: space-between;
+  align-self: flex-start;
+  padding: 1rem;
+}
+
+nav .links {
+  padding: 3ch;
+}
+
+nav .links a {
+  text-decoration: none;
+}
+
+nav .links a:visited {
+  color: var(--text-4-color); 
+}
+
+/* --- header --- */
+
+#app-container header:has(+ main):first-child {
+  margin-top: 2rem;
+  margin-bottom: auto;
+}
+
+header > h1,
+header > h2,
+header > h3,
+header > h4,
+header > h5 {
+  text-align: center;
+}
+
+/* --- footer --- */
+
+footer {
+  padding: 5ch;
+}
+
+footer {
+  align-self: flex-start;
+} 
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* --- input --- */
+input,
+textarea {
+  border: 1px solid #29BF12;
+  background-color: var(--text-4-color);
+  color: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  border: 1px solid #29BF12;
+  outline: 0;
+}
+
+/* Hides the number thing on the right side */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* --- buttons --- */
+button {
+  border-radius: 4px;
+  border: 1px solid var(--text-1-color);
+  background-color: var(--text-3-color);
+  outline: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+/* --- Home Page --- */
+
+#home-page {
+  display: flex;
+  justify-content: center;
+}
+
+#home-page h1 {
+  align-self: center;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 1rem;
+}
+
+#home-page h1::before {
+  background-image: url("../img/web_pink.png");
+  position: absolute;
+  background-size: 1.2em 1.2em;
+  display: inline-block;
+  width: 1.2em; 
+  height: 1.2em;
+  content:"";
+  translate: -1em 1em;
+  z-index: -1;
+} 
+
+#home-page + footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hanging-spider::after {
+  background-image: url("../img/greyGreen_spider.png");
+  position: absolute;
+  background-size: 1.7em 1.7em;
+  display: inline-block;
+  width: 1.7em; 
+  height: 1.7em;
+  content:"";
+  translate: -1.2em 1em;
+  z-index: -1;
+}
+
+/* --- Info page --- */
+
+header:has(+ #info-page) h2::after,
+header:has(+ #info-page) h2::before {
+  content: "🎉";
+}
+
+/* --- Question page --- */
+
+#question-page textarea {
+  width: 80%;
+  resize: none;
+}
+
+#question-page button {
+  align-self: center;
+}
+
+#question-page #question-form {
+  gap: 1rem;
+}
+
+#question-page #question-form label {
+  text-align: center;
+}
+
+/* --- Dating Page --- */
+#dating-page .question-box {
+  background-color: var(--text-4-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  color: var(--primary-color);
+  padding: 0.5rem;
+}
+
+#dating-page .spider-button {
+  /* border: transparent;
+  background-color: transparent; */
+  justify-items: center;
+  padding: 1rem;
+}
+
+#dating-page #spider-container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+}
+
+/* --- Dating Info Page --- */
+#alex-pic {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+/* --- Intro Questions Page --- */
+#intro-questions #intro-questions-form {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+  align-items: flex-end;
+}
+
+#intro-questions > form > span {
+  flex-basis: 20ch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#intro-questions label {
+  text-align: center;
+}
+
+#intro-questions > form > span:nth-child(1) {
+  flex-grow: 4;
+}
+
+#intro-questions > form > span:nth-child(2) {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 15ch;
+}
+
+#intro-questions > form > span:nth-child(3) {
+  flex-grow: 1;
+}
+
+#intro-questions > form > span:nth-child(4) {
+  flex-grow: 1;
+}
+
+#intro-questions input {
+  width: 90%;
+}

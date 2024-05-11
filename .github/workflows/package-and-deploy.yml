@@ -32,14 +32,27 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
+    - name: Build, tag, and push website image to Amazon ECR
+      id: build-website-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        ECR_REPOSITORY: ${{ secrets.ECR_WEBSITE_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
-      # The website's dockerfile is currently inside a subdirectory - Potential for moving it up
       working-directory: ./frontend
+      run: |
+        # Build a docker container and
+        # push it to ECR
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Build, tag, and push api image to Amazon ECR
+      id: build-api-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.ECR_API_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+      working-directory: ./ssd-api
       run: |
         # Build a docker container and
         # push it to ECR
@@ -52,21 +65,26 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        ECR_WEBSITE_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        ECR_API_REPOSITORY: ${{ secrets.ECR_API_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
         AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
-        AWS_SESSION_TOKEN: $${{ steps.creds.outputs.aws-session-token }}
+        AWS_SESSION_TOKEN: ${{ steps.creds.outputs.aws-session-token }}
       with:
         host: ${{ secrets.EC2_IP }}
         username: ubuntu
         key:  ${{ secrets.EC2_PRIVATE_KEY }}
-        envs: ECR_REGISTRY, ECR_REPOSITORY, IMAGE_TAG, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_REGION
+        envs: ECR_REGISTRY, ECR_WEBSITE_REPOSITORY, ECR_API_REPOSITORY, IMAGE_TAG, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_REGION
         script: |-
            aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
            sudo docker stop website || true
            sudo docker rm website || true
-           sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-           sudo docker run -d --name website -p 80:3000 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+           sudo docker pull $ECR_REGISTRY/$ECR_WEBSITE_REPOSITORY:$IMAGE_TAG
+           sudo docker run -d --name website -p 80:3000 $ECR_REGISTRY/$ECR_WEBSITE_REPOSITORY:$IMAGE_TAG
+           sudo docker stop api || true
+           sudo docker rm api || true
+           sudo docker pull $ECR_REGISTRY/$ECR_API_REPOSITORY:$IMAGE_TAG
+           sudo docker run -d --name api -p 5000:3000 -e DB_USER="${{ secrets.DB_USER }}" -e DB_NAME="${{ secrets.API_DB_NAME }}" -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" -e DB_CONNECTIONSTRING="${{ secrets.API_DB_URL }}" -e DB_PORT="${{ secrets.API_DB_PORT }}" -e JWT_SECRET="${{ secrets.JWT_SECRET }}" -e CLIENT_SECRET="${{ secrets.CLIENT_SECRET }}" -e CLIENT_ID="${{ secrets.CLIENT_ID }}" $ECR_REGISTRY/$ECR_API_REPOSITORY:$IMAGE_TAG
 

@@ -1,0 +1,47 @@
+<body>
+  <h1>Login Page!</h1>
+
+  <a href="#"><button id="back-to-home">Back to Home</button></a>
+
+  <script>
+    console.log("loaded");
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+    options = {
+        headers: {
+            "Access-Control-Allow-Origin": window.location.origin
+        }
+    }
+
+    fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/status", options)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => console.error("Error fetching API:", error));
+        
+    authOptions = {
+        headers: {
+            "Access-Control-Allow-Origin": window.location.origin,
+            "Authorization" : "Bearer " + code
+        }
+    }
+
+    console.log("fetching");
+    fetch("http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/auth", authOptions)
+        .then(response => {
+            response.text().then(token => {
+                localStorage.setItem("jwt", token);
+            }).catch(error => {
+                console.error("Error retrieving token:", error);
+            });
+            window.location.hash = "";
+        })
+        .catch(error => console.error("Error fetching API:", error));
+
+    backToHome = document.getElementById("back-to-home");
+    backToHome.addEventListener('click', () => {
+        window.location.hash = "";
+    })
+</script>
+
+</body>
