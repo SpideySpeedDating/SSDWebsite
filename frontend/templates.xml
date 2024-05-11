@@ -3,7 +3,7 @@
 <body id="dating-info"><header><h2>just a few more questions!</h2></header><main  id="dating-info" class="flex-container flex-column flex-center-column"><div  id="alex-pic"><img  width="350px" height="350px" src="../img/alex_pic.png"/><div><p><strong>Alexander Kruger</strong></p><p>Junior Software Engineer, Trusted Advisor, Just A Great Guy</p></div></div><p>We searched for a person who'd have the ability to determine 8 questions whose answers would help one find their soulmate. BBD's Alexander Kruger was the man for this job! He specially curated these intensive, mind opening &amp; soul searching questions just for SpideySpeedDating. Are you ready to dive deeper into yourself and find your one true love?</p></main><footer><a  href="#"><button>BACK TO HOME</button></a><a  href="#question"><button>let's hear your answers!</button></a></footer></body>
 <body id="dating-screen"><header><h2>Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="outlined-box">Why did my HTML not load correctly?
     </span><span  id="answer-bubble" class="outlined-box">Hello :)
-    </span><div  id="spider-container"><button  id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-2" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-3" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-4" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-5" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-6" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-7" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-8" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button></div></main><script>let questions = [
+    </span><div  id="spider-container"><button  id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-2" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-3" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-4" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-5" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-6" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-7" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-8" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button></div></main><script  type="module">let questions = [
           {
               "question_id": 1,
               "question": "Were you breastfed as a child?"
@@ -227,20 +227,26 @@
     }
 
     fetch(Utils.apiURL() + "/auth", authOptions)
-      .then(response =&gt; {
-        if (!response.ok) {
-          let loginMessage = document.getElementById("login-message");
-          loginMessage.textContent = "Failed to login! Please try again.";
-        } else {
-          response.json().then((data) =&gt; {
-            console.log(data);
-            localStorage.setItem("jwt", data["jwt"]);
-            window.location.hash = "";
-          })
-        }
-      })
-      .catch(error =&gt; console.error("Error fetching API:", error));
-
+        .then(response =&gt; {
+            if (!response.ok) {
+                let loginMessage = document.getElementById("login-message");
+                loginMessage.textContent = "Failed to login! Please try again.";
+            } else {
+                response.json().then((data) =&gt; {
+                    console.log(data);
+                    localStorage.setItem("jwt", data["jwt"]);
+                    window.location.hash = "";
+                })
+            }
+        })
+        .catch(error =&gt; console.error("Error fetching API:", error));
+    
+    if (!Utils.isNullOrUndefined(localStorage.getItem(Utils.loginRedirect))) {
+        let htmlId = localStorage.getItem(Utils.loginRedirect);
+        localStorage.removeItem(Utils.loginRedirect);
+        localStorage.removeItem(Utils.indexMessage);
+        window.location.hash = htmlId;
+    }
     let backToHome = document.getElementById("back-to-home");
     backToHome.addEventListener('click', () =&gt; {
       window.location.hash = "";
@@ -254,16 +260,23 @@
       textarea.style.height = textarea.scrollHeight + 2 + "px";
     }
     async function getQuestions() {
-      if (window.questions === undefined || window.questions === null) {
-        window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
-          method: "GET",
-          headers: {
-            "Authorization": localStorage.getItem("jwt")
-          }
-        }).then((response) =&gt; {return response.json()})
-        window.currQuestionIdx = 0;
+      if (!await Router.isValidSession()) {
+        Router.loginRedirect("question", "Session expired, please login");
+      } else {
+        if (window.questions === undefined || window.questions === null) {
+          window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
+            method: "GET",
+            headers: {
+              "Authorization": localStorage.getItem("jwt")
+            }
+          }).then((response) =&gt; {
+            window._response = response;
+            return response.json();
+          })
+          window.currQuestionIdx = 0;
+        }
+        renderCurrentQuestion();
       }
-      renderCurrentQuestion();
     }
     async function updateToNextQuestion(e) {
       e.preventDefault();
