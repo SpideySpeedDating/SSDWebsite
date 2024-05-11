@@ -16,32 +16,39 @@
   </footer>
   <script type="module">
     import {Utils} from "./lib/utils.js"
+    import {Router} from "./lib/router.js"
     function resizeTextArea() {
       let textarea = document.getElementById("question-input");
       textarea.style.height = "";
       textarea.style.height = textarea.scrollHeight + 2 + "px";
     }
     async function getQuestions() {
-      if (window.questions === undefined || window.questions === null) {
-        window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
-          method: "GET",
-          headers: {
-            "Authorization": localStorage.getItem("jwt")
-          }
-        }).then((response) => {return response.json()})
-        window.currQuestionIdx = 0;
+      if (!await Router.isValidSession()) {
+        Router.loginRedirect("question", "Session expired, please login");
+      } else {
+        if (window.questions === undefined || window.questions === null) {
+          window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
+            method: "GET",
+            headers: {
+              "Authorization": localStorage.getItem("jwt")
+            }
+          }).then((response) => {
+            window._response = response;
+            return response.json();
+          })
+          window.currQuestionIdx = 0;
+        }
+        renderCurrentQuestion();
       }
-      renderCurrentQuestion();
     }
     async function updateToNextQuestion(e) {
       e.preventDefault();
       let answer = textarea.value;
       if (answer === "" || answer === undefined) return;
-      await postAnswer(answer);
-      updateQuestion();
+      let shouldUpdateQuestion = await postAnswer(answer);
     }
     function updateQuestion() {
-      if (currQuestionIdx < questions.length) {
+      if (currQuestionIdx < questions.length - 1) {
         currQuestionIdx += 1;
         renderCurrentQuestion();
       } else {
@@ -65,7 +72,10 @@
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": localStorage.getItem("jwt")
         }
-      }).then(() => { console.log("Sent answer successfully"); });
+      }).then((response) => { 
+        if (response.status === 200) updateQuestion()
+        else alert("Failed to post answer");
+      });
     }
     let textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
@@ -79,7 +89,7 @@
     let nextButton = document.getElementById("question-footer-button");
     nextButton.addEventListener("click", updateToNextQuestion)
     
-    getQuestions()
+    await getQuestions()
 
   </script>
 </body>

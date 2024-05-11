@@ -35,40 +35,57 @@ class Router {
             if (router.#templatesXml === null) await router.getTemplates();
             let route = router.getRoute();
             router.routeHistory.push(route);
-            router.updateHtml(route.template, route.title);
+            await router.updateHtml(route.template, route.title, route.guarded || false);
         };
     }
     async getTemplates() {
         let xmlStr = await fetch(`${window.location.origin}/templates`).then((response) => response.text());
         this.#templatesXml = new DOMParser().parseFromString(xmlStr, "text/xml");
     }
-    updateHtml(templateId, title) {
+    static async isValidSession() {
+        return await fetch(`${Utils.apiURL()}/auth/verify`, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": localStorage.getItem("jwt")
+            }
+        }).then((response) => { 
+            if(response.status === 401) return false;
+            return true; 
+        });
+    }
+    async updateHtml(templateId, title, guarded) {
         this.unmountScripts();
-        let templateBody = this.#templatesXml.getElementById(templateId);
-        for (let child of templateBody.childNodes) {
-            if (child.tagName.toLowerCase() === "script") {
-                this.#scriptsToMount.push(
-                    { 
-                        "content": child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"),
-                        "type": child.getAttribute("type")
-                    }
-                );
+        let sessionValid = await Router.isValidSession();
+        if (!guarded || sessionValid) {
+            let templateBody = this.#templatesXml.getElementById(templateId);
+            for (let child of templateBody.childNodes) {
+                if (child.tagName.toLowerCase() === "script") {
+                    this.#scriptsToMount.push(
+                        { 
+                            "content": child.textContent.replaceAll("&amp;","&").replace("&lt;", "<").replace("&gt;", ">"),
+                            "type": child.getAttribute("type")
+                        }
+                    );
+                }
             }
-        }
 
-        templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
-        let appContainer = document.getElementById("app-container");
-        appContainer.innerHTML = "";
-        // .appendChild consumes the child from the template body
-        for(let idx=0; idx < templateBody.childNodes.length; idx) {
-            let child = templateBody.childNodes[idx];
-            if (child.tagName.toLowerCase() === "script") {
-                idx++;
+            templateBody = new DOMParser().parseFromString(templateBody.innerHTML, "text/html").body;
+            let appContainer = document.getElementById("app-container");
+            appContainer.innerHTML = "";
+            // .appendChild consumes the child from the template body
+            for(let idx=0; idx < templateBody.childNodes.length; idx) {
+                let child = templateBody.childNodes[idx];
+                if (child.tagName.toLowerCase() === "script") {
+                    idx++;
+                }
+                else appContainer.appendChild(child);
             }
-            else appContainer.appendChild(child);
+            document.title = title;
+            this.mountScripts();
+        } else {
+            Router.loginRedirect(templateId);
         }
-        document.title = title;
-        this.mountScripts()
     }
     mountScripts() {
         for(let idx=0; idx < this.#scriptsToMount.length; idx++) {
@@ -88,6 +105,11 @@ class Router {
             document.body.removeChild(script);
         }
         this.#mountedScripts = []
+    }
+    static loginRedirect(to, indexMessage=null) {
+        localStorage.setItem("loginRedirect", to);
+        if (!Utils.isNullOrUndefined(indexMessage)) localStorage.setItem(Utils.indexMessage, indexMessage);
+        window.location.hash = "#";
     }
     async start() {
         window.addEventListener("hashchange", this.uriHandlerClosure);

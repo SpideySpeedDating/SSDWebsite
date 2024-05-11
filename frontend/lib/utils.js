@@ -1,4 +1,6 @@
 class Utils {
+    static loginRedirect = "loginRedirect";
+    static indexMessage = "indexMessage";
     static isNullOrUndefined(value) {
         return (value === undefined || value === null);
     }

@@ -3,35 +3,43 @@ import { Router } from "./lib/router.js";
 const router = new Router({
     "/" : {
         title: "Home",
-        template: "index"
+        template: "index",
+        guarded: false
     },
     "login" : {
         title: "Login",
-        template: "login"
+        template: "login",
+        guarded: false
     },
     "intro-questions" : {
         title: "Intro Questions",
-        template: "intro-questions"
+        template: "intro-questions",
+        guarded: true
     },
     "info" : {
         title: "Information",
-        template: "info"
+        template: "info",
+        guarded: false
     },
     "question" : {
         title: "Questions",
-        template: "question"
+        template: "question",
+        guarded: true
     },
     "dating-screen" : {
         title: "Dating Time!",
-        template: "dating-screen"
+        template: "dating-screen",
+        guarded: true
     },
     "dating-info" : {
         title: "Dating-info",
-        template: "dating-info"
+        template: "dating-info",
+        guarded: true
     },
     "congrats" : {
         title: "Congrats",
-        template: "congrats"
+        template: "congrats",
+        guarded: true
     }
 });
 
