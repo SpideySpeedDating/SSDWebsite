@@ -43,11 +43,13 @@ class Router {
         this.#templatesXml = new DOMParser().parseFromString(xmlStr, "text/xml");
     }
     static async isValidSession() {
+        let jwt = localStorage.getItem("jwt");
+        if (!Utils.isNullOrUndefined(jwt)) return false;
         return await fetch(`${Utils.apiURL()}/auth/verify`, {
             method: "GET",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": localStorage.getItem("jwt")
+                "Authorization": jwt
             }
         }).then((response) => { 
             if(response.status === 401) return false;
