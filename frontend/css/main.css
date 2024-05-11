@@ -308,6 +308,34 @@ button:hover {
   width: 100%;
 }
 
+#github-login button {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5ch;
+  font-size: larger;
+  padding: 0.5ch;
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+#github-login button::before {
+  background-image: url("/img/github_octocat.svg");
+  background-size: 1.2em 1.2em;
+  display: inline-block;
+  height: 1.2em;
+  width: 1.2em;
+  content: " ";
+  text-align: center;
+  /* margin-right: 5px;
+  margin-top: 5px; */
+}
+
+/* --- Login page --- */
+
+#login-page {
+  gap: 1em;
+}
 
 /* --- Info page --- */
 

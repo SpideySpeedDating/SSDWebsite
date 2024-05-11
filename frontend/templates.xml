@@ -204,7 +204,7 @@
     form = document.getElementById("intro-questions-form");
     form.addEventListener('submit', submitForm);
   </script></body>
-<body id="login"><h1>Login Page!</h1><a  href="#"><button  id="back-to-home">Back to Home</button></a><script  type="module">import {Utils} from "/lib/utils.js";
+<body id="login"><main  id="login-page" class="flex-container flex-column flex-center-column"><h1>Login Page!</h1><p  id="login-message">You will be redirected when you have been authenticated!</p><a  href="#"><button  id="back-to-home">Back to Home</button></a></main><script  type="module">import {Utils} from "/lib/utils.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
@@ -230,11 +230,13 @@
     fetch(Utils.apiURL() + "/auth", authOptions)
         .then(response =&gt; {
             if (!response.ok) {
-                alert("Failed to login! Check your code?\n")
+                let loginMessage = document.getElementById("login-message");
+                loginMessage.textContent = "Failed to login! Please try again.";
             } else {
                 response.json().then((data) =&gt; {
                     console.log(data);
                     localStorage.setItem("jwt", data["jwt"]);
+                    window.location.hash = "";
                 })
             }
         })
