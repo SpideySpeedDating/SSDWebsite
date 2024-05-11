@@ -15,8 +15,9 @@
     <button id="question-footer-button">NEXT QUESTION</button> 
   </footer>
   <script type="module">
-    import {Utils} from "./lib/utils.js"
-    import {Router} from "./lib/router.js"
+    import {Utils} from "./lib/utils.js";
+    import {Router} from "./lib/router.js";
+    import {DataService} from "/lib/data-service.js";
     function resizeTextArea() {
       let textarea = document.getElementById("question-input");
       textarea.style.height = "";
@@ -27,15 +28,7 @@
         Router.loginRedirect("question", "Session expired, please login");
       } else {
         if (window.questions === undefined || window.questions === null) {
-          window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
-            method: "GET",
-            headers: {
-              "Authorization": localStorage.getItem("jwt")
-            }
-          }).then((response) => {
-            window._response = response;
-            return response.json();
-          })
+          window.questions = DataService.getQuestions();
           window.currQuestionIdx = 0;
         }
         renderCurrentQuestion();

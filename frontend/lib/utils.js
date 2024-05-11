@@ -14,5 +14,11 @@ class Utils {
         }
         return window.location.protocol + '//' + hostURL + ":5000";
     }
+
+    static removeElementIdChildren(node) {
+        while (node.firstChild) {
+            node.removeChild(node.lastChild);
+        }
+    }
 }
 export { Utils };

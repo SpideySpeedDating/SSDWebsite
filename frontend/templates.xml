@@ -3,42 +3,14 @@
 <body id="dating-info"><header><h2>just a few more questions!</h2></header><main  id="dating-info" class="flex-container flex-column flex-center-column"><div  id="alex-pic"><img  width="350px" height="350px" src="../img/alex_pic.png"/><div><p><strong>Alexander Kruger</strong></p><p>Junior Software Engineer, Trusted Advisor, Just A Great Guy</p></div></div><p>We searched for a person who'd have the ability to determine 8 questions whose answers would help one find their soulmate. BBD's Alexander Kruger was the man for this job! He specially curated these intensive, mind opening &amp; soul searching questions just for SpideySpeedDating. Are you ready to dive deeper into yourself and find your one true love?</p></main><footer><a  href="#"><button>BACK TO HOME</button></a><a  href="#question"><button>let's hear your answers!</button></a></footer></body>
 <body id="dating-screen"><header><h2>Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="outlined-box">Why did my HTML not load correctly?
     </span><span  id="answer-bubble" class="outlined-box">Hello :)
-    </span><div  id="spider-container"><button  id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-2" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-3" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-4" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-5" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-6" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-7" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button><button  id="spider-8" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button></div></main><script  type="module">let questions = [
-          {
-              "question_id": 1,
-              "question": "Were you breastfed as a child?"
-          },
-          {
-              "question_id": 2,
-              "question": "What type of bear is best?"
-          },
-          {
-              "question_id": 3,
-              "question": "Describe your perfect avocado?"
-          },
-          {
-              "question_id": 4,
-              "question": "What is your opinion on the following statement: Butter is food lotion"
-          },
-          {
-              "question_id": 5,
-              "question": "How did Bruno Mars know her eyes were open, unless his were too?"
-          },
-          {
-              "question_id": 6,
-              "question": "Do you agree with the following statement: Male spiders can be romantic"
-          },
-          {
-              "question_id": 7,
-              "question": "If you were stuck on a deserted island, and you could only write one Javascript program to keep you busy, how would you kill yourself?"
-          },
-          {
-              "question_id": 8,
-              "question": "Would you rather be stuck on an island with a male spider or a bear spider?"
-          }
-      ];
+    </span><div  id="spider-container"><p  class="flex-container flex-column flex-center-column">:( Sorry No one is participating
+      </p></div></main><template  id="spider-button-template-parent"><button  class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()"><img  width="100px" height="100px" src="../img/greyGreen_spider.png"/></button></template><script  type="module">import {DataService} from "./lib/data-service.js";
+    import {Utils} from "./lib/utils.js";
+    
+    let questions = window.questions || await DataService.getQuestions()
     let userAnswers;
     let questionNumber = 0;
+    console.log(questions)
 
     const requestOptions = {
       method: 'GET',
@@ -52,9 +24,7 @@
         const buttonNumber = clickedId.split("-")[1];
         
         var answerElement = document.getElementById("answer-bubble");
-        // This should display on the ending screen
-        // answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
-        answerElement.textContent = "You found: test@user.com";
+        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
       }
 
       var element = document.getElementById(clickedId);
@@ -76,44 +46,66 @@
       answerElement.textContent = "";
     }
 
-    function GetQuestions(){
-      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions', requestOptions)
-      .then(response =&gt; {
-        if (!response.ok) {
-          throw new Error(response);
-        }
+    async function GetUserAnswers(){
+      userAnswers = {
+        email: "user@emil.com",
+        answers: [
+          "Answer", "Answer but 2"
+        ]
+      }
+      // fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
+      // .then(response =&gt; {
+      //   if (!response.ok) {
+      //     throw new Error(response);
+      //   }
 
-        return response.json();
-      })
-      .then(responseBody =&gt; {
-        questions = responseBody;
-      })
-      .catch(error =&gt; {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+      //   return response.json();
+      // })
+      // .then(responseBody =&gt; {
+      //   userAnswers = responseBody;
+      // })
+      // .catch(error =&gt; {
+      //   console.error('There was a problem with the fetch operation:', error);
+      // });
     }
 
-    function GetUserAnswers(){
-      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/random', requestOptions)
-      .then(response =&gt; {
-        if (!response.ok) {
-          throw new Error(response);
-        }
-
-        return response.json();
-      })
-      .then(responseBody =&gt; {
-        userAnswers = responseBody;
-      })
-      .catch(error =&gt; {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-    }
-
-    function initialize(){
+    async function initialize(){
       // Load the first question
-      questionDisplay = document.getElementById("dating-question");
+      let questionDisplay = document.getElementById("dating-question");
       questionDisplay.textContent = questions[questionNumber].question;
+      // Load answers
+      await GetUserAnswers();
+      console.log()
+      if (!Utils.isNullOrUndefined(userAnswers) &amp;&amp; userAnswers["answers"].length &gt; 0) {
+        let template = document.getElementById("spider-button-template-parent");
+        let container = document.getElementById("spider-container");
+        let removeChildren = true;
+        for(let idx=0; idx &lt; userAnswers["answers"].length; idx++) {
+          if (removeChildren) {
+            Utils.removeElementIdChildren(container);
+            removeChildren = false;
+          }
+          container.appendChild(createSpiderButton(idx));
+        }
+      }
+      // Foreach answer insert template
+    }
+
+    function createSpiderButton(idx) {
+      let button = document.createElement("button");
+      button.id = `spider-${idx}`;
+      button.class="spider-button";
+      button.addEventListener("click", (e) =&gt; {EatBug(`${button.id}`)});
+      button.addEventListener("onmouseover", (e) =&gt; {SetSpiderAnswer(`${button.id}`)});
+      button.addEventListener("onmouseout", HideAnswer);
+      button.appendChild(createSpiderImage());
+      return button
+    }
+
+    function createSpiderImage() {
+      let img = document.createElement("img");
+      img.src="../img/greyGreen_spider.png";
+      return img;
     }
 
     initialize();
@@ -263,8 +255,9 @@
       window.location.hash = "";
     })
   </script></body>
-<body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button  id="question-footer-button">NEXT QUESTION</button></footer><script  type="module">import {Utils} from "./lib/utils.js"
-    import {Router} from "./lib/router.js"
+<body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button  id="question-footer-button">NEXT QUESTION</button></footer><script  type="module">import {Utils} from "./lib/utils.js";
+    import {Router} from "./lib/router.js";
+    import {DataService} from "/lib/data-service.js";
     function resizeTextArea() {
       let textarea = document.getElementById("question-input");
       textarea.style.height = "";
@@ -275,15 +268,7 @@
         Router.loginRedirect("question", "Session expired, please login");
       } else {
         if (window.questions === undefined || window.questions === null) {
-          window.questions = await fetch(`${Utils.apiURL()}/api/questions/all`, {
-            method: "GET",
-            headers: {
-              "Authorization": localStorage.getItem("jwt")
-            }
-          }).then((response) =&gt; {
-            window._response = response;
-            return response.json();
-          })
+          window.questions = DataService.getQuestions();
           window.currQuestionIdx = 0;
         }
         renderCurrentQuestion();

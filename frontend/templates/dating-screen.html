@@ -10,70 +10,19 @@
       Hello :)
     </span>
     <div id="spider-container">
-      <button id="spider-1" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-2" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-3" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-4" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-5" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-6" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-7" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
-      <button id="spider-8" class="spider-button" onclick="EatBug(this.id)" onmouseover="SetSpiderAnswer(this.id)" onmouseout="HideAnswer()">
-        <img width="100px" height="100px" src="../img/greyGreen_spider.png" />
-      </button>
+      <p class="flex-container flex-column flex-center-column">
+        :( Sorry No one is participating
+      </p>
     </div>
   </main>
-
   <script type="module">
-    let questions = [
-          {
-              "question_id": 1,
-              "question": "Were you breastfed as a child?"
-          },
-          {
-              "question_id": 2,
-              "question": "What type of bear is best?"
-          },
-          {
-              "question_id": 3,
-              "question": "Describe your perfect avocado?"
-          },
-          {
-              "question_id": 4,
-              "question": "What is your opinion on the following statement: Butter is food lotion"
-          },
-          {
-              "question_id": 5,
-              "question": "How did Bruno Mars know her eyes were open, unless his were too?"
-          },
-          {
-              "question_id": 6,
-              "question": "Do you agree with the following statement: Male spiders can be romantic"
-          },
-          {
-              "question_id": 7,
-              "question": "If you were stuck on a deserted island, and you could only write one Javascript program to keep you busy, how would you kill yourself?"
-          },
-          {
-              "question_id": 8,
-              "question": "Would you rather be stuck on an island with a male spider or a bear spider?"
-          }
-      ];
+    import {DataService} from "./lib/data-service.js";
+    import {Utils} from "./lib/utils.js";
+    
+    let questions = window.questions || await DataService.getQuestions()
     let userAnswers;
     let questionNumber = 0;
+    console.log(questions)
 
     const requestOptions = {
       method: 'GET',
@@ -87,9 +36,7 @@
         const buttonNumber = clickedId.split("-")[1];
         
         var answerElement = document.getElementById("answer-bubble");
-        // This should display on the ending screen
-        // answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
-        answerElement.textContent = "You found: test@user.com";
+        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
       }
 
       var element = document.getElementById(clickedId);
@@ -108,47 +55,72 @@
 
     function HideAnswer(){
       var answerElement = document.getElementById("answer-bubble");
+
       answerElement.textContent = "";
     }
 
-    function GetQuestions(){
-      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/questions', requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response);
-        }
+    async function GetUserAnswers(){
+      userAnswers = {
+        email: "user@emil.com",
+        answers: [
+          "Answer", "Answer but 2"
+        ]
+      }
+      // fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
+      // .then(response => {
+      //   if (!response.ok) {
+      //     throw new Error(response);
+      //   }
 
-        return response.json();
-      })
-      .then(responseBody => {
-        questions = responseBody;
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+      //   return response.json();
+      // })
+      // .then(responseBody => {
+      //   userAnswers = responseBody;
+      // })
+      // .catch(error => {
+      //   console.error('There was a problem with the fetch operation:', error);
+      // });
     }
 
-    function GetUserAnswers(){
-      fetch('http://ec2-3-252-74-206.eu-west-1.compute.amazonaws.com:5000/api/answers/random', requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response);
-        }
-
-        return response.json();
-      })
-      .then(responseBody => {
-        userAnswers = responseBody;
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-    }
-
-    function initialize(){
+    async function initialize(){
       // Load the first question
-      questionDisplay = document.getElementById("dating-question");
+      let questionDisplay = document.getElementById("dating-question");
       questionDisplay.textContent = questions[questionNumber].question;
+      // Load answers
+      await GetUserAnswers();
+      console.log()
+      if (!Utils.isNullOrUndefined(userAnswers) && userAnswers["answers"].length > 0) {
+        let template = document.getElementById("spider-button-template-parent");
+        let container = document.getElementById("spider-container");
+        let removeChildren = true;
+        for(let idx=0; idx < userAnswers["answers"].length; idx++) {
+          if (removeChildren) {
+            Utils.removeElementIdChildren(container);
+            removeChildren = false;
+          }
+          container.appendChild(createSpiderButton(idx));
+        }
+      }
+      // Foreach answer insert template
+    }
+
+    function createSpiderButton(idx) {
+      let button = document.createElement("button");
+      button.id = `spider-${idx}`;
+      button.class="spider-button";
+      button.addEventListener("click", (e) => {EatBug(`${button.id}`)});
+      button.addEventListener("onmouseover", (e) => {SetSpiderAnswer(`${button.id}`)});
+      button.addEventListener("onmouseout", HideAnswer);
+      button.appendChild(createSpiderImage());
+      return button
+    }
+
+    function createSpiderImage() {
+      let img = document.createElement("img");
+      img.src="../img/greyGreen_spider.png";
+      img.width="100px";
+      img.height="100px";
+      return img;
     }
 
     initialize();
