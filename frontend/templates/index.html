@@ -22,7 +22,6 @@
 
     async function navigateToGithubLogin(event) {
       event.preventDefault();
-      console.log();
       let messageElement = document.getElementById("index-message");
       fetch(Utils.apiURL() + "/auth/generate_link").then((response) => {
         if (!response.ok) {
