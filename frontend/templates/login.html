@@ -1,49 +1,56 @@
 <body>
-  <h1>Login Page!</h1>
+  <main id="login-page" class="flex-container flex-column flex-center-column">
+    <h1>Login Page!</h1>
 
-  <a href="#"><button id="back-to-home">Back to Home</button></a>
+    <p id="login-message">You will be redirected when you have been authenticated!</p>
+
+    <a href="#"><button id="back-to-home">Back to Home</button></a>
+  </main>
+
 
   <script type="module">
-    import {Utils} from "/lib/utils.js";
+    import { Utils } from "/lib/utils.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     let options = {
-        headers: {
-            "Access-Control-Allow-Origin": window.location.origin
-        }
+      headers: {
+        "Access-Control-Allow-Origin": window.location.origin
+      }
     }
 
     fetch(Utils.apiURL() + "/api/status", options)
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => console.error("Error fetching API:", error));
-        
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.error("Error fetching API:", error));
+
     let authOptions = {
-        headers: {
-            "Access-Control-Allow-Origin": window.location.origin,
-            "Authorization" : code
-        }
+      headers: {
+        "Access-Control-Allow-Origin": window.location.origin,
+        "Authorization": code
+      }
     }
 
     fetch(Utils.apiURL() + "/auth", authOptions)
-        .then(response => {
-            if (!response.ok) {
-                alert("Failed to login! Check your code?\n")
-            } else {
-                response.json().then((data) => {
-                    console.log(data);
-                    localStorage.setItem("jwt", data["jwt"]);
-                })
-            }
-        })
-        .catch(error => console.error("Error fetching API:", error));
+      .then(response => {
+        if (!response.ok) {
+          let loginMessage = document.getElementById("login-message");
+          loginMessage.textContent = "Failed to login! Please try again.";
+        } else {
+          response.json().then((data) => {
+            console.log(data);
+            localStorage.setItem("jwt", data["jwt"]);
+            window.location.hash = "";
+          })
+        }
+      })
+      .catch(error => console.error("Error fetching API:", error));
 
     let backToHome = document.getElementById("back-to-home");
     backToHome.addEventListener('click', () => {
-        window.location.hash = "";
+      window.location.hash = "";
     })
-</script>
+  </script>
 
 </body>

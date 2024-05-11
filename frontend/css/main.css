@@ -59,24 +59,24 @@ html, body {
 /* --- Variables --- */
 
 :root {
-  --main-bg-color: #D1AAC8;
-  --primary-color:  #77AE6F;
-  --text-1-color: #504DFF;
-  --text-2-color: #0090CD;
-  --text-3-color: #ED4C7F;
-  --text-4-color: #524944;
+  --main-bg-color: #EEEEEE;
+  --secondary-bg-color: #BBBBBB;
+  --primary-color:  #222831;
+  --secondary-color: #393E46;
+  --button-color: #00ADB5;
 }
 
 /* --- General Settings --- */
 
 body {
-  color: var(--text-4-color);
+  color: var(--secondary-color);
   background-color: var(--main-bg-color);
   font-family: "Solway", serif;
 }
 
 h1, h2, h3, h4, h5 {
   font-family: "Calistoga", serif;
+  color: var(--primary-color);
 }
 
 h1 {
@@ -87,16 +87,8 @@ h2 {
   font-size: 2rem;
 }
 
-h1, h2 {
-  color: var(--text-1-color)
-}
-
-h3, h4, h5 {
-  color: var(--text-2-color)
-}
-
 a {
-  color: var(--text-4-color); 
+  color: var(--secondary-color);
 }
 
 .flex-container {
@@ -157,7 +149,7 @@ nav .links a {
 }
 
 nav .links a:visited {
-  color: var(--text-4-color); 
+  color: var(--secondary-color);
 }
 
 /* --- header --- */
@@ -178,32 +170,27 @@ header > h5 {
 /* --- footer --- */
 
 footer {
-  padding: 5ch;
-}
-
-footer {
-  align-self: flex-start;
-} 
-
-footer {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  align-self: flex-start;
+  padding: 3ch;
+  gap: 2ch;
 }
 
 /* --- input --- */
 input,
 textarea {
-  border: 1px solid #29BF12;
-  background-color: var(--text-4-color);
-  color: white;
+  border: 1px solid white;
+  background-color: var(--secondary-bg-color);
+  color: black;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
 }
 
 input:focus-visible,
 textarea:focus-visible {
-  border: 1px solid #29BF12;
+  border: 1px solid white;
   outline: 0;
 }
 
@@ -222,13 +209,35 @@ input[type=number] {
 /* --- buttons --- */
 button {
   border-radius: 4px;
-  border: 1px solid var(--text-1-color);
-  background-color: var(--text-3-color);
+  border: none;
+  background-color: var(--button-color);
   outline: 0;
 }
 
 button:hover {
   cursor: pointer;
+}
+
+/* --- Custom Reusables --- */
+
+.outlined-box {
+  background-color: var(--secondary-bg-color);
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+  color: var(--secondary-color);
+  padding: 0.5rem;
+}
+
+.hanging-spider::after {
+  background-image: url("../img/greyGreen_spider.png");
+  position: absolute;
+  background-size: 1.7em 1.7em;
+  display: inline-block;
+  width: 1.7em; 
+  height: 1.7em;
+  content: " ";
+  translate: -1.2em 1em;
+  z-index: -1;
 }
 
 /* --- Home Page --- */
@@ -239,6 +248,8 @@ button:hover {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  container-type: inline-size;
 }
 
 #home-page h1 {
@@ -260,22 +271,63 @@ button:hover {
   z-index: -1;
 } 
 
+#home-page h1::after {
+  background-image: url("../img/web_green.png");
+  position: absolute;
+  background-size: 1.2em 1.2em;
+  display: inline-block;
+  width: 1.2em; 
+  height: 1.2em;
+  content: "";
+  translate: 0em -0.8em;
+  z-index: -1;
+} 
+
+@container (max-width: 50rem) {
+  #home-page h1::before,
+  #home-page h1::after {
+    display: none;
+  }
+}
+@container (max-width: 20rem) {
+  #home-page h1 .hanging-spider::after {
+    background: none;
+  }
+}
+
 #home-page + footer {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.hanging-spider::after {
-  background-image: url("../img/greyGreen_spider.png");
-  position: absolute;
-  background-size: 1.7em 1.7em;
+#github-login button {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5ch;
+  font-size: larger;
+  padding: 0.5ch;
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+#github-login button::before {
+  background-image: url("/img/github_octocat.svg");
+  background-size: 1.2em 1.2em;
   display: inline-block;
-  width: 1.7em; 
-  height: 1.7em;
-  content:"";
-  translate: -1.2em 1em;
-  z-index: -1;
+  height: 1.2em;
+  width: 1.2em;
+  content: " ";
+  text-align: center;
+  /* margin-right: 5px;
+  margin-top: 5px; */
+}
+
+/* --- Login page --- */
+
+#login-page {
+  gap: 1em;
 }
 
 /* --- Info page --- */
@@ -307,14 +359,6 @@ header:has(+ #info-page) h2::before {
 /* --- Dating Page --- */
 #dating-page {
   gap: 1rem;
-}
-
-#dating-page .question-box {
-  background-color: var(--text-4-color);
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  color: var(--primary-color);
-  padding: 0.5rem;
 }
 
 #dating-page .spider-button {
