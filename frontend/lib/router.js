@@ -44,14 +44,14 @@ class Router {
     }
     static async isValidSession() {
         let jwt = localStorage.getItem("jwt");
-        if (!Utils.isNullOrUndefined(jwt)) return false;
+        if (Utils.isNullOrUndefined(jwt)) return false;
         return await fetch(`${Utils.apiURL()}/auth/verify`, {
             method: "GET",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization": jwt
             }
-        }).then((response) => { 
+        }).then((response) => {
             if(response.status === 401) return false;
             return true; 
         });
