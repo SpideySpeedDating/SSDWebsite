@@ -110,7 +110,11 @@ class Router {
     }
     static loginRedirect(to, indexMessage=null) {
         localStorage.setItem("loginRedirect", to);
-        if (!Utils.isNullOrUndefined(indexMessage)) localStorage.setItem(Utils.indexMessage, indexMessage);
+        if (!Utils.isNullOrUndefined(indexMessage)) {
+            localStorage.setItem(Utils.indexMessage, indexMessage);
+        } else {
+            localStorage.setItem(Utils.indexMessage, "Session expired, try again");
+        }
         window.location.hash = "#";
     }
     async start() {

@@ -31,28 +31,31 @@
         "Authorization": code
       }
     }
-
+    let loginMessage = document.getElementById("login-message");
     fetch(Utils.apiURL() + "/auth", authOptions)
         .then(response => {
             if (!response.ok) {
-                let loginMessage = document.getElementById("login-message");
                 loginMessage.textContent = "Failed to login! Please try again.";
             } else {
                 response.json().then((data) => {
                     console.log(data);
                     localStorage.setItem("jwt", data["jwt"]);
-                    window.location.hash = "";
+                    let hashLocation = ""; 
+                    if (!Utils.isNullOrUndefined(localStorage.getItem(Utils.loginRedirect))) {
+                      let htmlId = localStorage.getItem(Utils.loginRedirect);
+                      localStorage.removeItem(Utils.loginRedirect);
+                      localStorage.removeItem(Utils.indexMessage);
+                      hashLocation = htmlId;
+                    }
+                    window.location.href = "#" + hashLocation;
                 })
             }
         })
-        .catch(error => console.error("Error fetching API:", error));
+        .catch(error => {
+          loginMessage.textContent = "Failed to reach API server, please contact the developers";
+        });
     
-    if (!Utils.isNullOrUndefined(localStorage.getItem(Utils.loginRedirect))) {
-        let htmlId = localStorage.getItem(Utils.loginRedirect);
-        localStorage.removeItem(Utils.loginRedirect);
-        localStorage.removeItem(Utils.indexMessage);
-        window.location.hash = htmlId;
-    }
+
     let backToHome = document.getElementById("back-to-home");
     backToHome.addEventListener('click', () => {
       window.location.hash = "";

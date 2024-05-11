@@ -176,6 +176,7 @@ footer {
   align-self: flex-start;
   padding: 3ch;
   gap: 2ch;
+  flex-wrap: wrap;
 }
 
 /* --- input --- */
@@ -293,12 +294,6 @@ button:hover {
   #home-page h1 .hanging-spider::after {
     background: none;
   }
-}
-
-#home-page + footer {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
 }
 
 #github-login button {

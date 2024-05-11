@@ -106,7 +106,7 @@ async function exchangeCodeForAccessToken(code) {
 
     req.on("error", (error) => {
       console.error(error);
-      res.status(500).send("Failed to retrieve access token");
+      reject("Failed to get access token from GitHub, for some reason");
     });
 
     req.end();
