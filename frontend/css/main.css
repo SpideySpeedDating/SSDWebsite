@@ -54,6 +54,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 html, body {
   height: 100%;
+  color-scheme: light;
 }
 
 /* --- Variables --- */
@@ -218,6 +219,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* Autofill messes up the input box on chrome?? */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s !important;
 }
 
 /* --- buttons --- */
