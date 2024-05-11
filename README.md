@@ -8,42 +8,30 @@
 # API endpoints:
 
 To use any end points first hit base_url/auth sending bearer_Token in headers.
-This will return a jwt token which is needed for all other calls. This should be added in headers with key Authorization.
+This will return a jwt token which is needed for all other calls.
 
-* **GET** /auth
-  - exchanges github token for JWT
+## NB! Authorization header with JWT should be included in all calls
 
-* **GET** /api/questions
+## Updated endpoints
+**GET** /auth/
+  - exchanges github code for JWT and inserts user if not yet in db
+**GET** /auth/verify
+  - returns Status 200 if valid
+**GET** /api/questions/all
   - returns all questions
-* **GET** /api/users 
-  - returns user information
-* **GET** /api/users/all - Returns all users information
-* **Put** /api/users/update - Updates user and returns updated user
-    
-    body:
-
-        {
-            "email": "",
-            "username": "",
-            "gender": "",
-            "sexuality": "",
-            "age": ""
-        }
-    
-* **GET** /api/answers/ - Returns the current users answer to the requested question
-    
-    body:
-    
-        {
-            "question_id": ""
-        }
-
-* **GET** /api/answers/all - Returns all of the current users answers
-* **POST** /api/answers/create
-    
-    body:
-    
-        {
-            "answer": "",
-            "question_id": ""
-        }
+**GET** /api/users/
+  - returns current user information
+**PUT** /api/users/update
+  - updates current user information
+  - Needs body:{ "email": "", "username": "", "gender": "", "sexuality": "", "age": "" }
+**GET** /api/answers/
+  - returns current user's answer for specific question
+  - Needs body:{ "question_id": "" }
+**GET** /api/answers/all
+  - returns all current user answers
+**GET** /api/answers/random
+  - returns all answers and email of 8 or less random users with specific gender
+  - Needs body:{ "gender": "", "sexuality": "" }
+**POST** /api/answers/create
+  - inserts answer into db
+  - Needs body:{ "answer": "", "question_id": "" }

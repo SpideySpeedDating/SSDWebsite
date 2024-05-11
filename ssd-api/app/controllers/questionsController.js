@@ -1,15 +1,14 @@
-const questionsService = require('../services/questionsService');
+const questionsService = require("../services/questionsService");
 
 module.exports = {
     findAllQuestions: async (req, res) => {
         try {
             const questions = await questionsService.findAllQuestions();
 
-            return res.send(questions);
+            return res.status(200).send(questions);
         }
         catch (error) {
-            console.error(error);
-            return res.status(500).send(error.message);
+            return res.status(500).send({ message: error });
         }
     }
 };
