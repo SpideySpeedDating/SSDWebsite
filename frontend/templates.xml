@@ -204,49 +204,49 @@
     form = document.getElementById("intro-questions-form");
     form.addEventListener('submit', submitForm);
   </script></body>
-<body id="login"><main  id="login-page" class="flex-container flex-column flex-center-column"><h1>Login Page!</h1><p  id="login-message">You will be redirected when you have been authenticated!</p><a  href="#"><button  id="back-to-home">Back to Home</button></a></main><script  type="module">import {Utils} from "/lib/utils.js";
+<body id="login"><main  id="login-page" class="flex-container flex-column flex-center-column"><h1>Login Page!</h1><p  id="login-message">You will be redirected when you have been authenticated!</p><a  href="#"><button  id="back-to-home">Back to Home</button></a></main><script  type="module">import { Utils } from "/lib/utils.js";
 
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     let options = {
-        headers: {
-            "Access-Control-Allow-Origin": window.location.origin
-        }
+      headers: {
+        "Access-Control-Allow-Origin": window.location.origin
+      }
     }
 
     fetch(Utils.apiURL() + "/api/status", options)
-        .then(response =&gt; {
-            console.log(response);
-        })
-        .catch(error =&gt; console.error("Error fetching API:", error));
-        
+      .then(response =&gt; {
+        console.log(response);
+      })
+      .catch(error =&gt; console.error("Error fetching API:", error));
+
     let authOptions = {
-        headers: {
-            "Access-Control-Allow-Origin": window.location.origin,
-            "Authorization" : code
-        }
+      headers: {
+        "Access-Control-Allow-Origin": window.location.origin,
+        "Authorization": code
+      }
     }
 
     fetch(Utils.apiURL() + "/auth", authOptions)
-        .then(response =&gt; {
-            if (!response.ok) {
-                let loginMessage = document.getElementById("login-message");
-                loginMessage.textContent = "Failed to login! Please try again.";
-            } else {
-                response.json().then((data) =&gt; {
-                    console.log(data);
-                    localStorage.setItem("jwt", data["jwt"]);
-                    window.location.hash = "";
-                })
-            }
-        })
-        .catch(error =&gt; console.error("Error fetching API:", error));
+      .then(response =&gt; {
+        if (!response.ok) {
+          let loginMessage = document.getElementById("login-message");
+          loginMessage.textContent = "Failed to login! Please try again.";
+        } else {
+          response.json().then((data) =&gt; {
+            console.log(data);
+            localStorage.setItem("jwt", data["jwt"]);
+            window.location.hash = "";
+          })
+        }
+      })
+      .catch(error =&gt; console.error("Error fetching API:", error));
 
     let backToHome = document.getElementById("back-to-home");
     backToHome.addEventListener('click', () =&gt; {
-        window.location.hash = "";
+      window.location.hash = "";
     })
-</script></body>
+  </script></body>
 <body id="question"><header><h2>Question <span  id="question-id">1</span>:</h2></header><main  id="question-page" class="flex-container flex-column flex-justify-center"><form  id="question-form" class="flex-container flex-column flex-justify-center"><label  id="question-label" for="question-id">Were you breastfed as a child?</label><textarea  id="question-input" maxlength="150"> </textarea><button  id="question-form-button" type="submit">Next Question</button></form></main><footer><a  href="#"><button>BACK TO HOME</button></a><button  id="question-footer-button">NEXT QUESTION</button></footer><script  type="module">import {Utils} from "./lib/utils.js"
     function resizeTextArea() {
       let textarea = document.getElementById("question-input");
