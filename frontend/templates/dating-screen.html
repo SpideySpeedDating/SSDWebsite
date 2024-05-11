@@ -126,8 +126,8 @@
       button.id = `spider-${idx}`;
       button.class="spider-button";
       button.addEventListener("click", (e) => {EatBug(`${button.id}`)});
-      button.addEventListener("onmouseover", (e) => {SetSpiderAnswer(`${button.id}`)});
-      button.addEventListener("onmouseout", HideAnswer);
+      button.addEventListener("mouseover", (e) => {SetSpiderAnswer(`${button.id}`)});
+      button.addEventListener("mouseout", HideAnswer);
       button.appendChild(createSpiderImage());
       return button
     }
