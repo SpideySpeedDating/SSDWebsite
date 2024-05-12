@@ -1,5 +1,13 @@
 <templates>
-<body id="congrats"><div  class="flex-container flex-column flex-justify-space-between"><nav><img  id="top-left-image" width="150px" height="150px" src="../img/grumpyPurp_spider.png" alt="Top Left Image"/><a  href="#"><button  id="back-to-home">BACK TO HOME</button></a></nav><main  id="congrats-page"><h1>Congrats!</h1><p>You found your soulmate!!</p><p>Here is their personal information so you can find them:</p><p>Email Address: <strong><span  id="email">example@example.com</span></strong></p></main><footer></footer></div></body>
+<body id="congrats"><nav  class="top-bar-nav"><img  id="top-left-image" width="100px" height="100px" src="../img/grumpyPurp_spider.png" alt="Top Left Image"/><a  href="#"><button  id="back-to-home">BACK TO HOME</button></a></nav><main  id="congrats-page" class="flex-container flex-column flex-center-column"><h1>Congrats!</h1><p>You found your soulmate!!</p><p>Here is their personal information so you can find them:</p><p>Email Address: <strong><span  id="email">example@example.com</span></strong></p></main><script  type="module">let foundEmail = new URLSearchParams(window.location.search).get("foundEmail");
+        if (foundEmail) {
+            document.getElementById("email").textContent = foundEmail;
+        } else {
+            const p = document.createElement("p");
+            p.textContent = "Couldn't find an email, you probably shouldn't be on this page :)";
+            document.getElementById("congrats-page").replaceChildren(p);
+        }
+    </script></body>
 <body id="dating-info"><header><h2>just a few more questions!</h2></header><main  id="dating-info" class="flex-container flex-column flex-center-column"><div  id="alex-pic"><img  width="350px" height="350px" src="../img/alex_pic.png"/><div><p><strong>Alexander Kruger</strong></p><p>Junior Software Engineer, Trusted Advisor, Just A Great Guy</p></div></div><p>We searched for a person who'd have the ability to determine 8 questions whose answers would help one find their soulmate. BBD's Alexander Kruger was the man for this job! He specially curated these intensive, mind opening &amp; soul searching questions just for SpideySpeedDating. Are you ready to dive deeper into yourself and find your one true love?</p></main><footer><a  href="#"><button>BACK TO HOME</button></a><a  href="#question"><button>let's hear your answers!</button></a></footer></body>
 <body id="dating-screen"><header><h2>Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="outlined-box">Why did my HTML not load correctly?
     </span><span  id="answer-bubble" class="outlined-box">Hello :)
@@ -32,6 +40,7 @@
         let buttonNumber = clickedId.split("-")[1];
         var answerElement = document.getElementById("answer-bubble");
         answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
+        window.location.href = `?foundEmail=${userAnswers[buttonNumber].email}#congrats`;
         console.log(answerElement.textContent);
         answerElement.removeEventListener("mouseout", HideAnswer);
       }
@@ -109,7 +118,7 @@
     initialize();
   </script><footer><button>BACK TO HOME</button></footer></body>
 <body id="default-404"><h1>Default-404! (whoopsie daisy🕸️)</h1></body>
-<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav  id="home-page-nav"><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#" id="github-login"><button>Login with GitHub</button></a><a  href="#" id="logout" style="display: none;"><button>Logout</button></a></div></nav><main  id="home-page" class="flex-container flex-column flex-justify-space-between"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1><span  id="index-message" style="display: none;"></span></main><footer><a  href="#info">Not sure how it works? Click here!</a><nav  id="main-page-logged-in-links" style="display: none;" class="flex-container"><a  href="#intro-questions"><button>User Questions</button></a><a  href="#question"><button>Dating Questions</button></a></nav></footer></div><script  type="module">import {Utils} from "/lib/utils.js";
+<body id="index"><div  class="flex-container flex-column flex-justify-space-between"><nav  id="home-page-nav" class="top-bar-nav"><img  id="logo" src="img/logo.png" width="115" height="102"/><div  class="links"><a  href="#" id="github-login"><button>Login with GitHub</button></a><a  href="#" id="logout" style="display: none;"><button>Logout</button></a></div></nav><main  id="home-page" class="flex-container flex-column flex-justify-space-between"><h1>Welcome to Spidey Spee<span  class="hanging-spider">d</span>Dating!</h1><span  id="index-message" style="display: none;"></span></main><footer><a  href="#info">Not sure how it works? Click here!</a><nav  id="main-page-logged-in-links" style="display: none;" class="flex-container"><a  href="#intro-questions"><button>User Questions</button></a><a  href="#question"><button>Dating Questions</button></a></nav></footer></div><script  type="module">import {Utils} from "/lib/utils.js";
 
     async function navigateToGithubLogin(event) {
       event.preventDefault();

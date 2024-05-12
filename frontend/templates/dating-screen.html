@@ -44,6 +44,7 @@
         let buttonNumber = clickedId.split("-")[1];
         var answerElement = document.getElementById("answer-bubble");
         answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
+        window.location.href = `?foundEmail=${userAnswers[buttonNumber].email}#congrats`;
         console.log(answerElement.textContent);
         answerElement.removeEventListener("mouseout", HideAnswer);
       }

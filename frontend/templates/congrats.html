@@ -1,15 +1,22 @@
 <body>
-    <div class="flex-container flex-column flex-justify-space-between">
-        <nav>
-            <img id="top-left-image" width="150px" height="150px"src="../img/grumpyPurp_spider.png" alt="Top Left Image"/>
-            <a href="#"><button id="back-to-home">BACK TO HOME</button></a> 
-        </nav>
-        <main id="congrats-page">
-            <h1>Congrats!</h1>
-            <p>You found your soulmate!!</p>
-            <p>Here is their personal information so you can find them:</p>
-            <p>Email Address: <strong><span id="email">example@example.com</span></strong></p>
-        </main>
-        <footer></footer>
-    </div>
+    <nav class="top-bar-nav">
+        <img id="top-left-image" width="100px" height="100px" src="../img/grumpyPurp_spider.png" alt="Top Left Image"/>
+        <a href="#"><button id="back-to-home">BACK TO HOME</button></a> 
+    </nav>
+    <main id="congrats-page" class="flex-container flex-column flex-center-column">
+        <h1>Congrats!</h1>
+        <p>You found your soulmate!!</p>
+        <p>Here is their personal information so you can find them:</p>
+        <p>Email Address: <strong><span id="email">example@example.com</span></strong></p>
+    </main>
+    <script type="module">
+        let foundEmail = new URLSearchParams(window.location.search).get("foundEmail");
+        if (foundEmail) {
+            document.getElementById("email").textContent = foundEmail;
+        } else {
+            const p = document.createElement("p");
+            p.textContent = "Couldn't find an email, you probably shouldn't be on this page :)";
+            document.getElementById("congrats-page").replaceChildren(p);
+        }
+    </script>
 </body>

@@ -129,9 +129,9 @@ main.flex-container {
   width: calc(90vw - 1rem);
 }
 
-/* --- home page nav --- */
+/* --- top bar nav --- */
 
-#home-page-nav {
+.top-bar-nav {
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -140,6 +140,8 @@ main.flex-container {
   align-self: flex-start;
   padding: 1rem;
 }
+
+/* --- home page nav --- */
 
 #home-page-nav .links {
   padding: 3ch;
@@ -320,8 +322,8 @@ button:hover {
   text-align: center;
   display: flex;
   align-items: center;
-  gap: 0.5ch;
-  font-size: larger;
+  gap: 0.7ch;
+  font-size: large;
   padding: 0.5ch;
   background-color: var(--secondary-color);
   color: white;
@@ -335,8 +337,7 @@ button:hover {
   width: 1.2em;
   content: " ";
   text-align: center;
-  /* margin-right: 5px;
-  margin-top: 5px; */
+  flex-shrink: 0;
 }
 
 /* --- Login page --- */
