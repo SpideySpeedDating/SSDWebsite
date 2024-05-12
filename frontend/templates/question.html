@@ -28,7 +28,7 @@
         Router.loginRedirect("question", "Session expired, please login");
       } else {
         if (window.questions === undefined || window.questions === null) {
-          window.questions = DataService.getQuestions();
+          window.questions = await DataService.getQuestions();
           window.currQuestionIdx = 0;
         }
         renderCurrentQuestion();
@@ -50,6 +50,7 @@
     }
     function renderCurrentQuestion() {
       let questionLabel = document.getElementById("question-label");
+      console.log(window.questions);
       questionLabel.textContent = window.questions[window.currQuestionIdx].question;
       questionId.textContent = currQuestionIdx + 1;
       textarea.value = "";
