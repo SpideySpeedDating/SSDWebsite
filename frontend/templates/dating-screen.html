@@ -30,7 +30,7 @@
     const requestOptions = {
       method: 'GET',
       headers: {
-        'Authorization': ''
+        'Authorization': localStorage.getItem("jwt")
       }
     };
     function EatBug(clickedId) {
