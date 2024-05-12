@@ -40,7 +40,7 @@ module.exports = {
   findAllUsersOfGender: async (query) => {
     const client = await pool.connect();
     try {
-      rows = await client.query("SELECT * FROM users WHERE gender = ANY($1::text[]) OR sexuality = ANY($2::text[]) ORDER BY RANDOM() LIMIT 8", [query.gender, query.sexuality]);
+      rows = await client.query("SELECT * FROM users WHERE gender = ANY($1::text[]) AND sexuality = ANY($2::text[]) ORDER BY RANDOM() LIMIT 8", [query.gender, query.sexuality]);
       return rows;
     } finally {
       client.release();

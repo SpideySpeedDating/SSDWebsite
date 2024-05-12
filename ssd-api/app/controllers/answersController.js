@@ -44,12 +44,12 @@ module.exports = {
                     preferredSexuality = ["gay", "other"];
                 }
                 else {
-                    preferredGende = ["male", "female"];
+                    preferredGender = ["male", "female"];
                     preferredSexuality = ["straight", "gay", "other"];
                 }
             }
             else {
-                preferredGende = ["other"];
+                preferredGender = ["other"];
                 preferredSexuality = ["straight", "gay", "other"];
             }
 
