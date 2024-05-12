@@ -203,15 +203,15 @@ select {
   border: 2px solid white;
   background-color: var(--secondary-bg-color);
   color: black;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  border-radius: 0.5em;
   box-shadow: var(--input-shadow);
 }
 
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  border: 1px solid white;
+  border: 2px solid white;
   outline: 0;
 }
 
@@ -235,7 +235,7 @@ input:-webkit-autofill:focus {
 
 /* --- buttons --- */
 button {
-  border-radius: 6px;
+  border-radius: 0.5em;
   border: none;
   background-color: var(--button-color);
   outline: 0;
@@ -425,25 +425,31 @@ header:has(+ #info-page) h2::before {
   flex-direction: column;
 }
 
+
 #intro-questions label {
   text-align: center;
 }
 
-#intro-questions > form > span:nth-child(1) {
+#intro-questions #users-name-box {
   flex-grow: 4;
 }
 
-#intro-questions > form > span:nth-child(2) {
+#intro-questions #users-age-box {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 15ch;
 }
 
-#intro-questions > form > span:nth-child(3) {
+#intro-questions #users-email-box {
+  flex-grow: 2;
+  flex-basis: 40ch;
+}
+
+#intro-questions #users-gender-box {
   flex-grow: 1;
 }
 
-#intro-questions > form > span:nth-child(4) {
+#intro-questions #users-orientation-box {
   flex-grow: 1;
 }
 
