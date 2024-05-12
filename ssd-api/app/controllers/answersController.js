@@ -98,10 +98,10 @@ module.exports = {
             let userQuestion = await userQuestionService.findUserQuestion({ user_id: user.user_id, questionId });
             if (!userQuestion) {
                 userQuestion = await userQuestionService.createUserQuestion({ user_id: user.user_id, question_id: questionId });
-                answersService.updateAnswer({ answer: answer, user_question_id: userQuestion.user_question_id })
+                await answersService.createAnswer({ answer: answer, user_question_id: userQuestion.user_question_id });
             }
             else {
-                await answersService.createAnswer({ answer: answer, user_question_id: userQuestion.user_question_id });
+                await answersService.updateAnswer({ answer: answer, user_question_id: userQuestion.user_question_id })
             }
 
             return res.status(200).send({ message: "Success" });
