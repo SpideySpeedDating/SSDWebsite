@@ -9,13 +9,12 @@
         }
     </script></body>
 <body id="dating-info"><header><h2>just a few more questions!</h2></header><main  id="dating-info" class="flex-container flex-column flex-center-column"><div  id="alex-pic"><img  width="350px" height="350px" src="../img/alex_pic.png"/><div><p><strong>Alexander Kruger</strong></p><p>Junior Software Engineer, Trusted Advisor, Just A Great Guy</p></div></div><p>We searched for a person who'd have the ability to determine 8 questions whose answers would help one find their soulmate. BBD's Alexander Kruger was the man for this job! He specially curated these intensive, mind opening &amp; soul searching questions just for SpideySpeedDating. Are you ready to dive deeper into yourself and find your one true love?</p></main><footer><a  href="#"><button>BACK TO HOME</button></a><a  href="#question"><button>let's hear your answers!</button></a></footer></body>
-<body id="dating-screen"><header><h2>Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="outlined-box">Why did my HTML not load correctly?
+<body id="dating-screen"><header><h2  id="round-display">Round <span  id="round-id">1</span>:</h2></header><main  id="dating-page" class="flex-container flex-column"><span  id="dating-question" class="outlined-box">Please wait for the page to load.
     </span><span  id="answer-bubble" class="outlined-box">Hello :)
     </span><div  id="spider-container"><p  class="flex-container flex-column flex-center-column">:( Sorry No one is participating
       </p></div></main><script  type="module">import {DataService} from "./lib/data-service.js";
     import {Utils} from "./lib/utils.js";
     
-
     let questions = window.questions || await DataService.getQuestions()
     let userAnswers;
     let questionDisplay = document.getElementById("dating-question");
@@ -23,10 +22,11 @@
     let questionNumber = 0;
     let eatenUsers = 0;
     let container = document.getElementById("spider-container");
+    let complete = false;
     const requestOptions = {
       method: 'GET',
       headers: {
-        'Authorization': ''
+        'Authorization': localStorage.getItem("jwt")
       }
     };
     function EatBug(clickedId) {
@@ -35,15 +35,13 @@
       console.log("You clicked on", clickedId);
       element.style.setProperty("display", "none");
       questionNumber += 1;
-      updateQuestion();
-      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers &lt; 1)) {
+      if(questionNumber === questions.length || (userAnswers.length - eatenUsers &lt; 1)) {
         let buttonNumber = clickedId.split("-")[1];
         var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
         window.location.href = `?foundEmail=${userAnswers[buttonNumber].email}#congrats`;
         console.log(answerElement.textContent);
-        answerElement.removeEventListener("mouseout", HideAnswer);
       }
+      updateQuestion();
     }
     function removeRemainingSpiders(choosenId){
       for(let child of container.children) {
@@ -53,14 +51,17 @@
     }
     function SetSpiderAnswer(spiderId){
       const buttonNumber = spiderId.split("-")[1];
-      let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
-      var answerElement = document.getElementById("answer-bubble");
-      answerElement.textContent = spidersAnswer;
+      if (!complete) {
+        let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
+        var answerElement = document.getElementById("answer-bubble");
+        answerElement.textContent = spidersAnswer;
+      }
     }
     function HideAnswer(){
-      console.log("HideAnswer");
-      var answerElement = document.getElementById("answer-bubble");
-      answerElement.textContent = "";
+      if (!complete) {
+        var answerElement = document.getElementById("answer-bubble");
+        answerElement.textContent = "\u00a0"; // &amp;nbsp;
+      }
     }
     async function GetUserAnswers(){
       fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
@@ -81,11 +82,16 @@
     function updateQuestion(){
       questionDisplay.textContent = questions[questionNumber].question;
       questionNumberDisplay.textContent = questionNumber + 1;
+      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers == 1)) {
+        complete = true;
+        let roundDisplay = document.getElementById("round-display");
+        roundDisplay.textContent = "Just so you know what the last bug said!";
+      }
     }
     async function initialize(){
-      updateQuestion();
       // Load users with their answers
       await GetUserAnswers();
+      updateQuestion();
       if (!Utils.isNullOrUndefined(userAnswers) &amp;&amp; userAnswers.length &gt; 0) {
         let removeChildren = true;
         for(let idx=0; idx &lt; userAnswers.length; idx++) {
