@@ -148,6 +148,7 @@ main.flex-container {
 
 #home-page-nav .links {
   padding: 3ch;
+  gap: 1ch;
 }
 
 #home-page-nav .links a {
