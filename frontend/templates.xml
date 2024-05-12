@@ -51,11 +51,9 @@
     }
     function SetSpiderAnswer(spiderId){
       const buttonNumber = spiderId.split("-")[1];
-      if (!complete) {
-        let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
-        var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = spidersAnswer;
-      }
+      let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber].answer;
+      var answerElement = document.getElementById("answer-bubble");
+      answerElement.textContent = spidersAnswer;
     }
     function HideAnswer(){
       if (!complete) {
@@ -63,19 +61,19 @@
         answerElement.textContent = "\u00a0"; // &amp;nbsp;
       }
     }
-    async function GetUserAnswers(){
+    function getUserAnswers(){
       fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
       .then(response =&gt; {
         if (!response.ok) {
           throw new Error(response);
         }
 
-        return response.json();
-      })
-      .then(responseBody =&gt; {
-        userAnswers = responseBody;
-      })
-      .catch(error =&gt; {
+        response.json().then(responseBody =&gt; {
+          userAnswers = responseBody;
+          updateQuestion();
+          createSpiders();
+        });
+      }).catch(error =&gt; {
         console.error('There was a problem with the fetch operation:', error);
       });
     }
@@ -88,10 +86,7 @@
         roundDisplay.textContent = "Just so you know what the last bug said!";
       }
     }
-    async function initialize(){
-      // Load users with their answers
-      await GetUserAnswers();
-      updateQuestion();
+    function createSpiders(){
       if (!Utils.isNullOrUndefined(userAnswers) &amp;&amp; userAnswers.length &gt; 0) {
         let removeChildren = true;
         for(let idx=0; idx &lt; userAnswers.length; idx++) {
@@ -102,6 +97,11 @@
           container.appendChild(createSpiderButton(idx));
         }
       }
+    }
+    function initialize(){
+      // Load users with their answers
+      getUserAnswers();
+      
       // Foreach answer insert template
     }
     function createSpiderButton(idx) {

@@ -13,8 +13,10 @@ module.exports = {
                 res.status(400).send({ message: "Bad Request, no body" });
             }
 
-            const gender = (requestBody.gender || "").toLowerCase();
-            const sexuality = (requestBody.sexuality || "").toLowerCase();
+            const user = await usersService.findUserByAuthId(req.authId);
+
+            const gender = (user.gender || "").toLowerCase();
+            const sexuality = (user.sexuality || "").toLowerCase();
             let preferredGender = [];
             let preferredSexuality = [];
 
@@ -54,7 +56,7 @@ module.exports = {
             // TODO consider age range
 
             const users = await usersService.findAllUsersOfGender({ gender: preferredGender, sexuality: preferredSexuality });
-            let selectedUsers = users;
+            let selectedUsers = users.rows;
             if (users.length >= 8) {
                 selectedUsers = getRandomItems(users, 8);
             }
@@ -63,13 +65,15 @@ module.exports = {
             for (let i = 0; i < selectedUsers.length; i++) {
                 const userQuestions = await userQuestionService.findAllUserQuestions(selectedUsers[i]);
                 userQuestions.sort((a, b) => a.question_id - b.question_id);
-                const answers = [];
-                if (userQuestions) {
+                let answers = [];
+                if (userQuestions.length > 0) {
                     for (let i = 0; i < userQuestions.length; i++) {
                         const userQuestion = userQuestions[i];
                         const answer = await answersService.findAnswer(userQuestion) || "No answer provided";
                         answers.push(answer);
                     }
+                } else {
+                    answers = new Array(8).fill({answer: "No answer provided"});
                 }
 
                 randomUserAnswers.push({

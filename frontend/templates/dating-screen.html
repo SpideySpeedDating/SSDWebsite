@@ -36,7 +36,6 @@
     function EatBug(clickedId) {
       eatenUsers += 1;
       var element = document.getElementById(clickedId);
-      console.log("You clicked on", clickedId);
       element.style.setProperty("display", "none");
       questionNumber += 1;
       if(questionNumber === questions.length || (userAnswers.length - eatenUsers < 1)) {
@@ -55,11 +54,9 @@
     }
     function SetSpiderAnswer(spiderId){
       const buttonNumber = spiderId.split("-")[1];
-      if (!complete) {
-        let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
-        var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = spidersAnswer;
-      }
+      let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber].answer;
+      var answerElement = document.getElementById("answer-bubble");
+      answerElement.textContent = spidersAnswer;
     }
     function HideAnswer(){
       if (!complete) {
@@ -67,19 +64,19 @@
         answerElement.textContent = "\u00a0"; // &nbsp;
       }
     }
-    async function GetUserAnswers(){
+    function getUserAnswers(){
       fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
       .then(response => {
         if (!response.ok) {
           throw new Error(response);
         }
 
-        return response.json();
-      })
-      .then(responseBody => {
-        userAnswers = responseBody;
-      })
-      .catch(error => {
+        response.json().then(responseBody => {
+          userAnswers = responseBody;
+          updateQuestion();
+          createSpiders();
+        });
+      }).catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
     }
@@ -92,10 +89,7 @@
         roundDisplay.textContent = "Just so you know what the last bug said!";
       }
     }
-    async function initialize(){
-      // Load users with their answers
-      await GetUserAnswers();
-      updateQuestion();
+    function createSpiders(){
       if (!Utils.isNullOrUndefined(userAnswers) && userAnswers.length > 0) {
         let removeChildren = true;
         for(let idx=0; idx < userAnswers.length; idx++) {
@@ -106,6 +100,11 @@
           container.appendChild(createSpiderButton(idx));
         }
       }
+    }
+    function initialize(){
+      // Load users with their answers
+      getUserAnswers();
+      
       // Foreach answer insert template
     }
     function createSpiderButton(idx) {
