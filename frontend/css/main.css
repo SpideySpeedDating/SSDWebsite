@@ -54,6 +54,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 html, body {
   height: 100%;
+  color-scheme: light;
 }
 
 /* --- Variables --- */
@@ -128,9 +129,9 @@ main.flex-container {
   width: calc(90vw - 1rem);
 }
 
-/* --- nav --- */
+/* --- home page nav --- */
 
-nav {
+#home-page-nav {
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -140,16 +141,22 @@ nav {
   padding: 1rem;
 }
 
-nav .links {
+#home-page-nav .links {
   padding: 3ch;
 }
 
-nav .links a {
+#home-page-nav .links a {
   text-decoration: none;
 }
 
-nav .links a:visited {
+#home-page-nav .links a:visited {
   color: var(--secondary-color);
+}
+
+#main-page-logged-in-links {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 /* --- header --- */
@@ -169,6 +176,11 @@ header > h5 {
 
 /* --- footer --- */
 
+#app-container main + footer:last-child {
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -181,7 +193,8 @@ footer {
 
 /* --- input --- */
 input,
-textarea {
+textarea,
+select {
   border: 1px solid white;
   background-color: var(--secondary-bg-color);
   color: black;
@@ -190,7 +203,8 @@ textarea {
 }
 
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   border: 1px solid white;
   outline: 0;
 }
@@ -205,6 +219,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* Autofill messes up the input box on chrome?? */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s !important;
 }
 
 /* --- buttons --- */
@@ -384,7 +404,6 @@ header:has(+ #info-page) h2::before {
 #intro-questions #intro-questions-form {
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
   gap: 2rem;
   justify-content: center;
   padding: 2rem;
@@ -421,6 +440,7 @@ header:has(+ #info-page) h2::before {
   flex-grow: 1;
 }
 
-#intro-questions input {
+#intro-questions input,
+#intro-questions select {
   width: 90%;
 }
