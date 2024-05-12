@@ -11,7 +11,7 @@
   
       <span id="users-age-box">
         <label for="users-age">How old are you?</label>
-        <input id="users-age" type="number" min="18" required="true" />
+        <input id="users-age" type="number" min="18" max="99" required="true" />
       </span>
   
       <span id="users-gender-box">
@@ -49,14 +49,13 @@
     fetch(Utils.apiURL() + "/api/users/", options).then((res) => {
       if (res.ok) {
         res.json().then((data) => {
-          console.log(data);
           document.getElementById("users-name").value = data["username"] || "";
           document.getElementById("users-age").value = data["age"] || "";
           document.getElementById("users-gender").value = data["gender"] || "male";
           document.getElementById("users-orientation").value = data["sexuality"] || "straight";
         }).catch((err) => {
           displayMessage("Failed to parse JSON response");
-          console.log(err);
+          console.error("Couldn't set question values from API:\n", err);
         });
       } else {
         displayMessage("Failed to load user data. Try loggin in again.");
@@ -101,6 +100,7 @@
       let messageElement = document.getElementById("message");
       if (messageElement == null) {
         const mainBody = document.getElementById("intro-questions");
+        if (mainBody == null) return;
         messageElement = document.createElement("p");
         messageElement.id = "message";
         mainBody.prepend(messageElement);

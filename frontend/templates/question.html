@@ -73,6 +73,9 @@
     let textarea = document.getElementById("question-input");
     textarea.addEventListener("input", resizeTextArea);
     window.addEventListener("resize", resizeTextArea);
+    window.addEventListener("hashchange", () => {
+      window.removeEventListener("resize", resizeTextArea)
+    }, {once: true});
     
     let questionId = document.getElementById("question-id");
     
