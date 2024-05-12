@@ -19,7 +19,6 @@
     import {DataService} from "./lib/data-service.js";
     import {Utils} from "./lib/utils.js";
     
-
     let questions = window.questions || await DataService.getQuestions()
     let userAnswers;
     let questionDisplay = document.getElementById("dating-question");
@@ -27,6 +26,7 @@
     let questionNumber = 0;
     let eatenUsers = 0;
     let container = document.getElementById("spider-container");
+    let complete = false;
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -45,7 +45,7 @@
         var answerElement = document.getElementById("answer-bubble");
         answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
         console.log(answerElement.textContent);
-        answerElement.removeEventListener("mouseout", HideAnswer);
+        complete = true;
       }
     }
     function removeRemainingSpiders(choosenId){
@@ -61,9 +61,10 @@
       answerElement.textContent = spidersAnswer;
     }
     function HideAnswer(){
-      console.log("HideAnswer");
-      var answerElement = document.getElementById("answer-bubble");
-      answerElement.textContent = "";
+      if (!complete) {
+        var answerElement = document.getElementById("answer-bubble");
+        answerElement.textContent = "";
+      }
     }
     async function GetUserAnswers(){
       fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
