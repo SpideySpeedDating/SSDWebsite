@@ -25,7 +25,7 @@
     };
 
     function EatBug(clickedId) {
-      if(questionNumber === 7 || (userAnswers.length - eatenUsers &lt; 2)){
+      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers &lt; 2)){
         const buttonNumber = clickedId.split("-")[1];
         
         var answerElement = document.getElementById("answer-bubble");
@@ -230,7 +230,7 @@
           console.log(err);
         });
       } else {
-        displayMessage("Failed to load user data");
+        displayMessage("Failed to load user data. Try loggin in again.");
       }
     }).catch((err) =&gt; {
       displayMessage("Couldn't reach API while retrieving user data!\n" + err);
