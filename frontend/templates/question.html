@@ -6,13 +6,12 @@
     <form id="question-form" class="flex-container flex-column flex-justify-center">
       <label id="question-label" for="question-id">Were you breastfed as a child?</label>
       <textarea id="question-input" maxlength="150"> </textarea>
-      <button id="question-form-button" type="submit">Next Question</button>
     </form>
 
   </main>
   <footer>
-    <a href="#"><button>BACK TO HOME</button></a>
-    <button id="question-footer-button">NEXT QUESTION</button> 
+    <a href="#"><button>Back to Home</button></a>
+    <button id="question-footer-button">Next Question</button> 
   </footer>
   <script type="module">
     import {Utils} from "./lib/utils.js";
@@ -50,7 +49,6 @@
     }
     function renderCurrentQuestion() {
       let questionLabel = document.getElementById("question-label");
-      console.log(window.questions);
       questionLabel.textContent = window.questions[window.currQuestionIdx].question;
       questionId.textContent = currQuestionIdx + 1;
       textarea.value = "";
