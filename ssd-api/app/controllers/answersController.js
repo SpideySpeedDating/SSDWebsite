@@ -95,7 +95,7 @@ module.exports = {
             const answer = requestBody.answer || "No Answer";
 
             const user = await usersService.findUserByAuthId(authId);
-            let userQuestion = await userQuestionService.findUserQuestion({ user_id: user.user_id, questionId });
+            let userQuestion = await userQuestionService.findUserQuestion({ user_id: user.user_id, question_id: questionId });
             if (!userQuestion) {
                 userQuestion = await userQuestionService.createUserQuestion({ user_id: user.user_id, question_id: questionId });
                 await answersService.createAnswer({ answer: answer, user_question_id: userQuestion.user_question_id });
