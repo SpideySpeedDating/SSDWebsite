@@ -8,6 +8,11 @@
         <label for="users-name">What's your name?</label>
         <input id="users-name" required="true"/>
       </span>
+
+      <span id="users-email-box">
+        <label for="users-email">What email do you want to use to be contacted at?</label>
+        <input id="users-email" type="email"/>
+      </span>
   
       <span id="users-age-box">
         <label for="users-age">How old are you?</label>
@@ -50,6 +55,7 @@
       if (res.ok) {
         res.json().then((data) => {
           document.getElementById("users-name").value = data["username"] || "";
+          document.getElementById("users-email").value = data["email"] == "Email not available" ? "" : data["email"];
           document.getElementById("users-age").value = data["age"] || "";
           document.getElementById("users-gender").value = data["gender"] || "male";
           document.getElementById("users-orientation").value = data["sexuality"] || "straight";
@@ -67,6 +73,7 @@
     function submitForm(e) {
 
       let usersName = document.getElementById("users-name").value;
+      let usersEmail = document.getElementById("users-email").value;
       let usersAge = document.getElementById("users-age").value;
       let usersGender = document.getElementById("users-gender").value;
       let usersOrientation = document.getElementById("users-orientation").value;
@@ -75,6 +82,7 @@
         method: "PUT",
         body: JSON.stringify({
             "username": usersName,
+            "email": usersEmail,
             "gender": usersGender,
             "sexuality": usersOrientation,
             "age": usersAge
