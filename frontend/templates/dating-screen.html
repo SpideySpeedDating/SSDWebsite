@@ -1,10 +1,10 @@
 <body>
   <header>
-    <h2>Round <span id="round-id">1</span>:</h2>
+    <h2 id="round-display">Round <span id="round-id">1</span>:</h2>
   </header>
   <main id="dating-page" class="flex-container flex-column">
     <span id="dating-question" class="outlined-box">
-        Why did my HTML not load correctly?
+        Please wait for the page to load.
     </span>
     <span id="answer-bubble" class="outlined-box">
       Hello :)
@@ -39,15 +39,13 @@
       console.log("You clicked on", clickedId);
       element.style.setProperty("display", "none");
       questionNumber += 1;
-      updateQuestion();
-      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers < 1)) {
+      if(questionNumber === questions.length || (userAnswers.length - eatenUsers < 1)) {
         let buttonNumber = clickedId.split("-")[1];
         var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
         window.location.href = `?foundEmail=${userAnswers[buttonNumber].email}#congrats`;
         console.log(answerElement.textContent);
-        complete = true;
       }
+      updateQuestion();
     }
     function removeRemainingSpiders(choosenId){
       for(let child of container.children) {
@@ -57,14 +55,16 @@
     }
     function SetSpiderAnswer(spiderId){
       const buttonNumber = spiderId.split("-")[1];
-      let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
-      var answerElement = document.getElementById("answer-bubble");
-      answerElement.textContent = spidersAnswer;
+      if (!complete) {
+        let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
+        var answerElement = document.getElementById("answer-bubble");
+        answerElement.textContent = spidersAnswer;
+      }
     }
     function HideAnswer(){
       if (!complete) {
         var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = "";
+        answerElement.textContent = "\u00a0"; // &nbsp;
       }
     }
     async function GetUserAnswers(){
@@ -86,11 +86,16 @@
     function updateQuestion(){
       questionDisplay.textContent = questions[questionNumber].question;
       questionNumberDisplay.textContent = questionNumber + 1;
+      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers == 1)) {
+        complete = true;
+        let roundDisplay = document.getElementById("round-display");
+        roundDisplay.textContent = "Just so you know what the last bug said!";
+      }
     }
     async function initialize(){
-      updateQuestion();
       // Load users with their answers
       await GetUserAnswers();
+      updateQuestion();
       if (!Utils.isNullOrUndefined(userAnswers) && userAnswers.length > 0) {
         let removeChildren = true;
         for(let idx=0; idx < userAnswers.length; idx++) {
