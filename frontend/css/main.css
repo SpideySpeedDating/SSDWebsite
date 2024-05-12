@@ -65,6 +65,8 @@ html, body {
   --primary-color:  #222831;
   --secondary-color: #393E46;
   --button-color: #00ADB5;
+
+  --input-shadow: 0px 4px 4px rgba(0,0,0,0.25);
 }
 
 /* --- General Settings --- */
@@ -78,6 +80,7 @@ body {
 h1, h2, h3, h4, h5 {
   font-family: "Calistoga", serif;
   color: var(--primary-color);
+  text-shadow: var(--input-shadow);
 }
 
 h1 {
@@ -129,9 +132,9 @@ main.flex-container {
   width: calc(90vw - 1rem);
 }
 
-/* --- home page nav --- */
+/* --- top bar nav --- */
 
-#home-page-nav {
+.top-bar-nav {
   display: flex;
   flex-direction: row;
   width: 100vw;
@@ -140,6 +143,8 @@ main.flex-container {
   align-self: flex-start;
   padding: 1rem;
 }
+
+/* --- home page nav --- */
 
 #home-page-nav .links {
   padding: 3ch;
@@ -195,11 +200,12 @@ footer {
 input,
 textarea,
 select {
-  border: 1px solid white;
+  border: 2px solid white;
   background-color: var(--secondary-bg-color);
   color: black;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
+  box-shadow: var(--input-shadow);
 }
 
 input:focus-visible,
@@ -229,10 +235,12 @@ input:-webkit-autofill:focus {
 
 /* --- buttons --- */
 button {
-  border-radius: 4px;
+  border-radius: 6px;
   border: none;
   background-color: var(--button-color);
   outline: 0;
+  box-shadow: var(--input-shadow);
+  padding: 0.2rem 0.7rem;
 }
 
 button:hover {
@@ -320,8 +328,8 @@ button:hover {
   text-align: center;
   display: flex;
   align-items: center;
-  gap: 0.5ch;
-  font-size: larger;
+  gap: 0.7ch;
+  font-size: large;
   padding: 0.5ch;
   background-color: var(--secondary-color);
   color: white;
@@ -335,8 +343,7 @@ button:hover {
   width: 1.2em;
   content: " ";
   text-align: center;
-  /* margin-right: 5px;
-  margin-top: 5px; */
+  flex-shrink: 0;
 }
 
 /* --- Login page --- */

@@ -14,6 +14,19 @@ module.exports = {
     }
   },
 
+  updateAnswer: async (query) => {
+    const client = await pool.connect();
+    try {
+      const { rows } = await client.query(
+        "UPDATE answers SET answer = $1 WHERE user_question_id = $2 RETURNING *",
+        [query.answer, query.user_question_id]
+      );
+      return rows[0];
+    } finally {
+      client.release();
+    }
+  },  
+
   findAnswer: async (user_question) => {
     const client = await pool.connect();
     try {
