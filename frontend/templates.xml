@@ -15,87 +15,65 @@
     let questionNumber = 0;
     let eatenUsers = 0;
     let container = document.getElementById("spider-container");
-    console.log(questions)
-
     const requestOptions = {
       method: 'GET',
       headers: {
         'Authorization': ''
       }
     };
-
     function EatBug(clickedId) {
-      if(questionNumber === 7 || (userAnswers.length - eatenUsers &lt; 2)){
-        const buttonNumber = clickedId.split("-")[1];
-        
-        var answerElement = document.getElementById("answer-bubble");
-        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
-      }
-
+      eatenUsers += 1;
       var element = document.getElementById(clickedId);
       console.log("You clicked on", clickedId);
       element.style.setProperty("display", "none");
-      eatenUsers += 1;
       questionNumber += 1;
       updateQuestion();
+      if(questionNumber === questions.length - 1 || (userAnswers.length - eatenUsers &lt; 1)) {
+        let buttonNumber = clickedId.split("-")[1];
+        var answerElement = document.getElementById("answer-bubble");
+        answerElement.textContent = "You found: " + userAnswers[buttonNumber].email;
+        console.log(answerElement.textContent);
+        answerElement.removeEventListener("mouseout", HideAnswer);
+      }
     }
-
+    function removeRemainingSpiders(choosenId){
+      for(let child of container.children) {
+        if(child.id === choosenId) continue;
+        else child.style.setProperty("display", "none");
+      }
+    }
     function SetSpiderAnswer(spiderId){
       const buttonNumber = spiderId.split("-")[1];
-      console.log(`Hover on ${buttonNumber}`);
       let spidersAnswer = userAnswers[buttonNumber].answers[questionNumber];
       var answerElement = document.getElementById("answer-bubble");
       answerElement.textContent = spidersAnswer;
     }
-
     function HideAnswer(){
+      console.log("HideAnswer");
       var answerElement = document.getElementById("answer-bubble");
-      answerElement.textContent = "Hello :)";
+      answerElement.textContent = "";
     }
-
     async function GetUserAnswers(){
-      userAnswers = [
-        {
-          email: "user1@emil.com",
-          answers: [
-            "user 1 answer", "user 1 answer but question 2"
-          ]
-        },
-        {
-          email: "user2@emil.com",
-          answers: [
-            "user 2 answer", "user 2 answer but question 2"
-          ]
-        },
-        {
-          email: "user3@emil.com",
-          answers: [
-            "user 3 answer", "user 3 answer but question 2"
-          ]
+      fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
+      .then(response =&gt; {
+        if (!response.ok) {
+          throw new Error(response);
         }
-      ]
-      // fetch(`${Utils.apiURL()}/api/answers/random`, requestOptions)
-      // .then(response =&gt; {
-      //   if (!response.ok) {
-      //     throw new Error(response);
-      //   }
 
-      //   return response.json();
-      // })
-      // .then(responseBody =&gt; {
-      //   userAnswers = responseBody;
-      // })
-      // .catch(error =&gt; {
-      //   console.error('There was a problem with the fetch operation:', error);
-      // });
+        return response.json();
+      })
+      .then(responseBody =&gt; {
+        userAnswers = responseBody;
+      })
+      .catch(error =&gt; {
+        console.error('There was a problem with the fetch operation:', error);
+      });
     }
-
     function updateQuestion(){
       questionDisplay.textContent = questions[questionNumber].question;
-      questionNumberDisplay = questionNumber + 1;
+      questionNumberDisplay.textContent = questionNumber + 1;
     }
     async function initialize(){
-
       updateQuestion();
       // Load users with their answers
       await GetUserAnswers();
@@ -111,13 +89,6 @@
       }
       // Foreach answer insert template
     }
-    function getIdOfVisibleSiper() {
-      for(let child of container.children) {
-        if (child.style.display != "none") return child.id;
-      }
-      return undefined;
-    }
-
     function createSpiderButton(idx) {
       let button = document.createElement("button");
       button.id = `spider-${idx}`;
@@ -128,7 +99,6 @@
       button.appendChild(createSpiderImage());
       return button
     }
-
     function createSpiderImage() {
       let img = document.createElement("img");
       img.src="../img/greyGreen_spider.png";
@@ -136,7 +106,6 @@
       img.height="100";
       return img;
     }
-
     initialize();
   </script><footer><button>BACK TO HOME</button></footer></body>
 <body id="default-404"><h1>Default-404! (whoopsie daisy🕸️)</h1></body>
