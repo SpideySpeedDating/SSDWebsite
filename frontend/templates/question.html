@@ -20,7 +20,7 @@
     function resizeTextArea() {
       let textarea = document.getElementById("question-input");
       textarea.style.height = "";
-      textarea.style.height = textarea.scrollHeight + 2 + "px";
+      textarea.style.height = textarea.scrollHeight + 6 + "px";
     }
     async function getQuestions() {
       if (!await Router.isValidSession()) {
