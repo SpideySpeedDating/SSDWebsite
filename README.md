@@ -36,4 +36,4 @@ This will return a jwt token which is needed for all other calls.
   - inserts answer into db
   - Needs body:{ "answer": "", "question_id": "" }
 
-Also Hi, you can use docker compose to run our project! Just go into the relevant folder and use `docker compose up`
+Also Hi, you can use docker compose to run our project! Just go into the relevant folder and use `docker compose up`.
